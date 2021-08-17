@@ -8,8 +8,9 @@ class CustomDio extends DioForNative {
 
 
   CustomDio() {
-    options.baseUrl = "";
+    options.baseUrl = "https://jsonplaceholder.typicode.com";
     interceptors.add(CustomInterceptors());
     options.connectTimeout = 5000;
+    options.contentType = "application/json;charset=UTF-8";
   }
 }
