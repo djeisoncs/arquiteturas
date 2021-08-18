@@ -14,7 +14,7 @@ class PostDatasourceImpl implements PostDatasource {
 
   @override
   Future<List<PostModel>> call(int id) async {
-    final response = await dio.get("https://jsonplaceholder.typicode.com/posts/$id");
+    final response = await dio.get("https://jsonplaceholder.typicode.com/posts/$id/comments");
 
     if (response.statusCode == 200) {
       return (response.data as List).map((m) => PostModel.fromMap(m)).toList();
