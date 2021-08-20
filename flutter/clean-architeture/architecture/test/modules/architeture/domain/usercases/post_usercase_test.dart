@@ -19,7 +19,7 @@ main() {
     when(repository.call(any))
         .thenAnswer((_) async => Right(<Post>[]));
 
-    final result = await usercase(1);
+    final result = await usercase("1");
 
     expect(result, isA<Right>());
     expect(result | null, isA<List<Post>>());
@@ -29,7 +29,7 @@ main() {
     when(repository.call(any))
         .thenAnswer((_) async => Left(ApiException()));
 
-    final result = await usercase(1);
+    final result = await usercase("1");
 
     expect(result.fold(id, id), isA<ApiException>());
   });

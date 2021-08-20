@@ -20,7 +20,7 @@ main() {
     when(datasource.call(any))
         .thenAnswer((_) async => <PostModel>[]);
 
-    final result = await repository.call(1);
+    final result = await repository.call("1");
 
     expect(result | null, isA<List<PostModel>>());
   });
@@ -30,7 +30,7 @@ main() {
     when(datasource.call(any))
         .thenThrow(ApiException());
 
-    final result = await repository.call(1);
+    final result = await repository.call("1");
 
     expect(result.fold(id, id), isA<ApiException>());
   });

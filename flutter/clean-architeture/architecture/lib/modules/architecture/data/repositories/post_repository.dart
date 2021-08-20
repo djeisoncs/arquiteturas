@@ -12,7 +12,7 @@ class PostRepositoryImpl implements PostRepository {
   PostRepositoryImpl(this.datasource);
 
   @override
-  Future<Either<AppException, List<Post>>> call(int id) async {
+  Future<Either<AppException, List<Post>>> call(String id) async {
     try {
       final result = await datasource.call(id);
 

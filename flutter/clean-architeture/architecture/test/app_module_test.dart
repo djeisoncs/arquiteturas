@@ -36,7 +36,7 @@ main() {
 
     final usercase = Modular.get<PostDatasource>();
 
-    final result = await usercase(1);
+    final result = await usercase("1");
 
     expect(result , isA<List<Post>>());
   });

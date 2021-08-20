@@ -5,5 +5,5 @@ import 'package:dartz/dartz.dart';
 
 abstract class PostUsercase {
 
-  Future<Either<AppException, List<Post>>> call(int id);
+  Future<Either<AppException, List<Post>>> call(String id);
 }

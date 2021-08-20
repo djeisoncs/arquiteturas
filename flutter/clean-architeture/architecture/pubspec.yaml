@@ -32,6 +32,7 @@ dependencies:
   jwt_decode: ^0.3.1
   flutter_modular: ">=3.0.0 <4.0.0"
   bloc: ^6.0.1
+  rxdart: ^0.27.1
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,4 +1,5 @@
 import 'package:architecture/modules/architecture/domain/entities/post.dart';
+import 'package:architecture/modules/architecture/domain/erros/erros.dart';
 import 'package:architecture/modules/architecture/domain/usercases/post_usercase.dart';
 import 'package:architecture/modules/architecture/presenter/post/post_bloc.dart';
 import 'package:architecture/modules/architecture/presenter/post/states/post_state.dart';
@@ -22,6 +23,19 @@ main() {
       ])
     );
 
-    bloc.add(1);
+    bloc.add("1");
+  });
+
+  test("Deve retornar um erro", () {
+    when(usercase.call(any)).thenAnswer((_) async => Left(ApiException()));
+
+    expect(bloc,
+      emitsInOrder([
+        isA<PostStateLoading>(),
+        isA<PostStateError>()
+      ])
+    );
+
+    bloc.add("1");
   });
 }

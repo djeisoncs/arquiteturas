@@ -22,7 +22,7 @@ main() {
     when(dio.get(any))
         .thenAnswer((_) async => Response(data: jsonDecode(PostResult), statusCode: 200, requestOptions: null));
 
-    expect(datasource.call(1), completes);
+    expect(datasource.call("1"), completes);
   });  
 
 
@@ -31,6 +31,6 @@ main() {
     when(dio.get(any))
         .thenAnswer((_) async => Response(data: null, statusCode: 401, requestOptions: null));
 
-    expect(datasource.call(1), throwsA(isA<ApiException>()));
+    expect(datasource.call("1"), throwsA(isA<ApiException>()));
   });
 }

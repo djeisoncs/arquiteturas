@@ -14,7 +14,7 @@ class PostUsercaseImpl implements PostUsercase {
   PostUsercaseImpl(this.repository);
 
   @override
-  Future<Either<AppException, List<Post>>> call(int id) async {
+  Future<Either<AppException, List<Post>>> call(String id) async {
 
     if (isNull(id)) {
       return Left(ApiException());

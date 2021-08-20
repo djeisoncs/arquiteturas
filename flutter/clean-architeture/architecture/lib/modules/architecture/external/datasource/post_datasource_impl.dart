@@ -13,7 +13,7 @@ class PostDatasourceImpl implements PostDatasource {
   PostDatasourceImpl(this.dio);
 
   @override
-  Future<List<PostModel>> call(int id) async {
+  Future<List<PostModel>> call(String id) async {
     final response = await dio.get("https://jsonplaceholder.typicode.com/posts/$id/comments");
 
     if (response.statusCode == 200) {
