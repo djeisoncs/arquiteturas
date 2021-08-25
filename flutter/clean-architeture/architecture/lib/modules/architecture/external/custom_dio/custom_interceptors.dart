@@ -1,5 +1,6 @@
 
 
+import 'package:architecture/modules/architecture/domain/erros/erros.dart';
 import 'package:dio/dio.dart';
 
 class CustomInterceptors extends InterceptorsWrapper {
@@ -20,5 +21,11 @@ class CustomInterceptors extends InterceptorsWrapper {
   void onError(DioError err, ErrorInterceptorHandler handler) {
     // TODO: implement onError
     super.onError(err, handler);
+  }
+
+  void _tratarErro(DioError erro) {
+    if (erro.response?.statusCode == 401) {
+      throw ApiException(msg: "Teste");
+    }
   }
 }

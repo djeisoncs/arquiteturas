@@ -24,7 +24,17 @@ class PostDatasourceImpl implements PostDatasource {
     final response = await client.get("/posts/$id/comments");
 
     if (response.statusCode == 200) {
-      return (response.data as List).map((m) => PostModel.fromMap(m)).toList();
+      return (response.data as List).map<PostModel>((m) => PostModel.fromMap(m)).toList();
+    }
+
+    throw ApiException();
+  }
+
+  Future<dynamic> call2(String id) async {
+    final response = await client.get("/posts/$id/comments");
+
+    if (response.statusCode == 200) {
+      return response.data;
     }
 
     throw ApiException();
@@ -36,22 +46,9 @@ class PostDatasourceImpl implements PostDatasource {
   // }
 
   @override
-  Future<dynamic> create(PostModel entidade) async {
-    try {
+  Future<PostModel> create(PostModel entidade) async {
+    final response = await client.post("/posts", data: entidade.toJson());
 
-      final response =
-      await client.post("/posts", data: entidade.toJson());
-
-      final String res = json.encode(response.data);
-      print('[API Helper - POST] Server Response: ' + res);
-
-      return response.data;
-    } on DioError catch (e) {
-      print('[API Helper - POST] Connection Exception => ' + e.message);
-
-      if (e != null && e.response != null && e.response.data != null)
-        throw ApiException();
-    }
+    return PostModel.fromMap(response.data);
   }
-
 }

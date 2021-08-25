@@ -7,5 +7,5 @@ abstract class PostDatasource {
 
   Future<List<PostModel>> call(String id);
 
-  Future<dynamic> create(PostModel entidade);
+  Future<PostModel> create(PostModel entidade);
 }

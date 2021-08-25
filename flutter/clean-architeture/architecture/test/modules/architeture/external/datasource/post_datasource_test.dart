@@ -3,44 +3,69 @@
 import 'dart:convert';
 
 import 'package:architecture/modules/architecture/data/model/post_model.dart';
-import 'package:architecture/modules/architecture/domain/erros/erros.dart';
 import 'package:architecture/modules/architecture/external/custom_dio/custom_dio.dart';
 import 'package:architecture/modules/architecture/external/datasource/post_datasource_impl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:http_mock_adapter/http_mock_adapter.dart';
 
 import '../../mok/post_mock.dart';
 
-class DioMock extends Mock implements CustomDio {}
 main() {
 
-  final dio = DioMock();
+  CustomDio dio;
+  DioAdapter dioAdapter;
+  PostDatasourceImpl datasource;
 
-  final datasource = PostDatasourceImpl(dio);
+  group("Grupo responsável por realizar testes da camada de comunicação com Apis externas", () {
+    const baseUrl = 'https://example.com';
+    const pathGet = "/posts/1/comments";
+    const pathGetError = "/posts/0/comments";
 
-  test("Deve retornar uma lista de PostModel", () async {
+    setUp(() {
+      dio = CustomDio();
+      dio.options = BaseOptions(baseUrl: baseUrl);
 
-    when(dio.get(any))
-        .thenAnswer((_) async => Response(data: jsonDecode(PostResult), statusCode: 200, requestOptions: null));
+      datasource = PostDatasourceImpl(dio);
+      dioAdapter = DioAdapter(dio: dio);
+    });
 
-    expect(datasource.call("1"), completes);
-  });  
+    test("Deve realizar metodos referente as chamadas do metodo call", () async {
+      dioAdapter
+        ..onGet(
+            pathGetError,
+            (server) => server.throws(
+              401,
+              DioError(
+                requestOptions: RequestOptions(
+                  path: pathGetError,
+                ),
+              ),
+            )
+        )
+        ..onGet(
+            pathGet,
+            (server) => server.reply(200, jsonDecode(PostResultList))
+        );
 
+      expect(datasource.call("0"), throwsA(isA<DioError>()),);
 
-  test("Deve retornar um DioError se ocorrer alguma exceção na consulta", () async {
+      final result = await datasource.call("1");
 
-    when(dio.get(any))
-        .thenAnswer((_) async => Response(data: null, statusCode: 401, requestOptions: null));
+      expect(result, isA<List<PostModel>>());
+    });
 
-    expect(datasource.call("1"), throwsA(isA<ApiException>()));
-  });
+    test("Testar Metodo Post", () async {
+      final entidade = PostModel(userId: 1, title: "Teste", body: "Testando metodo post");
+      dioAdapter.onPost("/posts",
+              (server) => server.reply(200, jsonDecode(PostResult)),
+          data: entidade.toJson()
+      );
 
-  test("Deve realizar um chamada no webservice do tipo post", () async {
-    var entidade = PostModel(body: "teste", title: "Teste chamada post", userId: 1);
+      final result = await datasource.create(entidade);
 
-    when(dio.post(any)).thenAnswer((_) async => Response(statusCode: 200, requestOptions: null));
+      expect(result, isA<PostModel>());
+    });
 
-    expect(datasource.create(entidade), completes);
   });
 }
