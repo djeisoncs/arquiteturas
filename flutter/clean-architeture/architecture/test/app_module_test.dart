@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:architecture/app_module.dart';
 import 'package:architecture/init_modular.dart';
-import 'package:architecture/modules/architecture/data/datasources/post_datasource.dart';
 import 'package:architecture/modules/architecture/domain/entities/post.dart';
 import 'package:architecture/modules/architecture/domain/usercases/impl/post_usercase_impl.dart';
 import 'package:architecture/modules/architecture/domain/usercases/post_usercase.dart';
@@ -35,10 +34,10 @@ main() {
     when(dio.get(any))
         .thenAnswer((_) async => Response(data: jsonDecode(PostResultList), statusCode: 200, requestOptions: null));
 
-    final usercase = Modular.get<PostDatasource>();
+    final usercase = Modular.get<PostUsercase>();
 
     final result = await usercase("1");
 
-    expect(result , isA<List<Post>>());
+    expect(result | null, isA<List<Post>>());
   });
 }
