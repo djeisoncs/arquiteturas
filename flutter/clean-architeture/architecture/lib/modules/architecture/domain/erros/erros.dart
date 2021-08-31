@@ -13,4 +13,8 @@ class ApiException implements AppException {
   ApiException({this.msg});
 }
 
-class AuthException implements AppException {}
+class AuthException implements AppException {
+  final String msg;
+
+  AuthException({this.msg});
+}

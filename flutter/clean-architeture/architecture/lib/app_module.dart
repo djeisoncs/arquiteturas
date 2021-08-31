@@ -3,6 +3,7 @@ import 'package:architecture/modules/architecture/data/repositories/post_reposit
 import 'package:architecture/modules/architecture/domain/usercases/impl/post_usercase_impl.dart';
 import 'package:architecture/modules/architecture/external/custom_dio/custom_dio.dart';
 import 'package:architecture/modules/architecture/external/datasource/post_datasource_impl.dart';
+import 'package:architecture/modules/architecture/presenter/auth/bloc/auth_bloc.dart';
 import 'package:architecture/modules/architecture/presenter/post/post_bloc.dart';
 import 'package:architecture/modules/architecture/presenter/post/post_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -25,7 +26,7 @@ class AppModule extends Module {
     Bind.singleton((i) => AuthDatasourceImpl(i())),
     Bind.singleton((i) => AuthRepositoryImpl(i())),
     Bind.singleton((i) => AuthUsercaseImpl(i())),
-    // Bind.singleton((i) => AuthBloc(i())),
+    Bind.singleton((i) => AuthBloc(i())),
   ];
 
   @override
