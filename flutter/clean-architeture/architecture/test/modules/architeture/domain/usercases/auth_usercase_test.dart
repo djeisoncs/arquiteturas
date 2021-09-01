@@ -23,7 +23,7 @@ main() {
     test("Deve realizar o Login", () async {
       when(repository.auth(any, any)).thenAnswer((_) async => Right(Usuario()));
 
-      final result = await usercase.auth("username", "password");
+      final result = await usercase.signIn("username", "password");
 
       expect(result | null, isA<Usuario>());
 
@@ -36,7 +36,7 @@ main() {
       when(repository.auth(any, any))
           .thenAnswer((_) async => Right(Usuario()));
 
-      final result = await usercase.auth("", "passwordTest");
+      final result = await usercase.signIn("", "passwordTest");
 
       expect(result.isLeft(), true);
       expect(result.fold((l) => l, (r) => r), isA<AppError>());
@@ -46,7 +46,7 @@ main() {
       when(repository.auth(any, any))
           .thenAnswer((_) async => Right(Usuario()));
 
-      final result = await usercase.auth(null, "passwordTest");
+      final result = await usercase.signIn(null, "passwordTest");
 
       expect(result.fold(id, id), isA<AppError>());
     });
@@ -56,7 +56,7 @@ main() {
           when(repository.auth(any, any))
               .thenAnswer((_) async => Right(Usuario()));
 
-          final result = await usercase.auth("", "");
+          final result = await usercase.signIn("", "");
 
           expect(result.fold(id, id), isA<AppError>());
         });
@@ -66,7 +66,7 @@ main() {
           when(repository.auth(any, any))
               .thenAnswer((_) async => Right(Usuario()));
 
-          final result = await usercase.auth(null, null);
+          final result = await usercase.signIn(null, null);
 
           expect(result.fold(id, id), isA<AppError>());
         });
@@ -75,7 +75,7 @@ main() {
       when(repository.auth(any, any))
           .thenAnswer((_) async => Right(Usuario()));
 
-      final result = await usercase.auth("userTest", "");
+      final result = await usercase.signIn("userTest", "");
 
       expect(result.fold(id, id), isA<AppError>());
     });
@@ -84,7 +84,7 @@ main() {
       when(repository.auth(any, any))
           .thenAnswer((_) async => Right(Usuario()));
 
-      final result = await usercase.auth("userTest", null);
+      final result = await usercase.signIn("userTest", null);
 
       expect(result.fold(id, id), isA<AppError>());
     });

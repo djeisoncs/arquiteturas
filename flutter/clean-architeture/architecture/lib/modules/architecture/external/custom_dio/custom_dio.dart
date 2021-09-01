@@ -1,5 +1,5 @@
 
-import 'package:architecture/modules/architecture/utils/api_path.dart';
+import 'package:architecture/modules/architecture/constantes/api_path.dart';
 import 'package:dio/native_imp.dart';
 
 import 'custom_interceptors.dart';

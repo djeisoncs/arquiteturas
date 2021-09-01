@@ -2,7 +2,7 @@
 import 'package:architecture/modules/architecture/data/model/usuario_model.dart';
 import 'package:architecture/modules/architecture/external/custom_dio/custom_dio.dart';
 import 'package:architecture/modules/architecture/external/datasource/auth_datasource_impl.dart';
-import 'package:architecture/modules/architecture/utils/api_path.dart';
+import 'package:architecture/modules/architecture/constantes/api_path.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';

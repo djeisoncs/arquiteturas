@@ -32,7 +32,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Stream<AuthState> _mapAuthLoadingToState(AuthSiginEvent event) async* {
-    final result = await usercase.auth(event.username, event.password);
+    final result = await usercase.signIn(event.username, event.password);
     yield result.fold((l) => AuthErrorState(l), (r) => AuthSucessState(r));
   }
 

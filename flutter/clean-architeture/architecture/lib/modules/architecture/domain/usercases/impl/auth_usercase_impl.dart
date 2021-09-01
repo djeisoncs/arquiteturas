@@ -15,13 +15,31 @@ class AuthUsercaseImpl implements AuthUsercase {
   AuthUsercaseImpl(this.repository);
 
   @override
-  Future<Either<Exception, Usuario>> auth(String username, String password) async {
+  Future<Either<Exception, Usuario>> signIn(String username, String password) async {
 
     if (isNullOrIsEmpity(username) || isNullOrIsEmpity(password)) {
       return Left(AppError());
     }
 
     return repository.auth(username, password);
+  }
+
+  @override
+  Future<Either<Exception, void>> signOut(String username, String password) {
+    // TODO: implement signOut
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Exception, void>> clearCurrentUser() {
+    // TODO: implement clearCurrentUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Exception, dynamic>> getCurrentUser() {
+    // TODO: implement getCurrentUser
+    throw UnimplementedError();
   }
   
 }

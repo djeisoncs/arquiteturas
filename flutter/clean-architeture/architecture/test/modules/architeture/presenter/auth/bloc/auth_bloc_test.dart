@@ -22,7 +22,7 @@ main() {
 
   test("Deve retornar os estados da autenticação na ordem correta", () {
     final event = AuthSiginEvent("username", "password");
-    when(usercase.auth(any, any)).thenAnswer((_) async => Right(Usuario()));
+    when(usercase.signIn(any, any)).thenAnswer((_) async => Right(Usuario()));
 
     expect(bloc,
       emitsInOrder([
@@ -36,7 +36,7 @@ main() {
 
   test("Deve retornar um erro na autenticação", () {
     final event = AuthSiginEvent("", "");
-    when(usercase.auth(any, any)).thenAnswer((_) async => Left(AppError()));
+    when(usercase.signIn(any, any)).thenAnswer((_) async => Left(AppError()));
 
     expect(bloc,
         emitsInOrder([
