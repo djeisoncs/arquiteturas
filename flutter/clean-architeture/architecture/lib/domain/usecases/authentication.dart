@@ -13,6 +13,4 @@ class AuthenticationParams {
   String password;
 
   AuthenticationParams({@required String email, @required String password});
-
-  Map toJson() => {"email": this.email, "password": this.password};
 }
