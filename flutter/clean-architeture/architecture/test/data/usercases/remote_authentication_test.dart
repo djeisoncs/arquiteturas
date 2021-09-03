@@ -1,24 +1,11 @@
-
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:meta/meta.dart';
 
-class RemoteAuthentication {
-  final HttpClient httpClient;
-  final String url;
-  RemoteAuthentication({@required this.httpClient, @required this.url});
-  Future<void> auth() async {
-    await httpClient.request(url: url, method: "post");
-  }
-}
+import 'package:architecture/domain/usecases/usercases.dart';
 
-abstract class HttpClient {
-  Future<void> request({
-    @required url,
-    @required method
-  });
-}
+import 'package:architecture/data/usecases/usecases.dart';
+import 'package:architecture/data/http/http.dart';
 
 class HttpClientMock extends Mock implements HttpClient {}
 
@@ -34,10 +21,14 @@ main() {
   });
 
   test("Should call HttpClient with correct methodo", () async {
+    final params = AuthenticationParams(email: faker.internet.email(), password: faker.internet.password());
+    await sut.auth(params);
 
-    await sut.auth();
-
-    verify(httpClient.request(url: url, method: "post"));
+    verify(httpClient.request(
+        url: url,
+        method: "post",
+        body: {"email": params.email, "password": params.password}
+    ));
 
   });
 }
