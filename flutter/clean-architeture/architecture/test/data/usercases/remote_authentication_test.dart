@@ -20,50 +20,78 @@ main() {
     httpClient = HttpClientMock();
     url = faker.internet.httpUrl();
     sut = RemoteAuthentication(httpClient: httpClient, url: url);
-    params = AuthenticationParams(email: faker.internet.email(), password: faker.internet.password());
+    params = AuthenticationParams(
+        email: faker.internet.email(), password: faker.internet.password());
   });
 
   test("Should call HttpClient with correct method", () async {
+    when(httpClient.request(
+            url: anyNamed("url"),
+            method: anyNamed("method"),
+            body: anyNamed("body")))
+        .thenAnswer((_) async =>
+            {"accessToken": faker.guid.guid(), "name": faker.person.name()});
+
     await sut.auth(params);
 
     verify(httpClient.request(
         url: url,
         method: "post",
-        body: {"email": params.email, "password": params.password}
-    ));
-
+        body: {"email": params.email, "password": params.password}));
   });
 
   test("Should throw UnexpectedError if HttpClient returns 400", () async {
-    when(httpClient.request(url: anyNamed("url"), method: anyNamed("method"), body: anyNamed("body")))
+    when(httpClient.request(
+            url: anyNamed("url"),
+            method: anyNamed("method"),
+            body: anyNamed("body")))
         .thenThrow(HttpError.badRequest);
 
     expect(sut.auth(params), throwsA(DomainError.unexpected));
-
   });
 
   test("Should throw UnexpectedError if HttpClient returns 404", () async {
-    when(httpClient.request(url: anyNamed("url"), method: anyNamed("method"), body: anyNamed("body")))
+    when(httpClient.request(
+            url: anyNamed("url"),
+            method: anyNamed("method"),
+            body: anyNamed("body")))
         .thenThrow(HttpError.notFound);
 
     expect(sut.auth(params), throwsA(DomainError.unexpected));
-
   });
 
   test("Should throw InvalidCre if HttpClient returns 500", () async {
-    when(httpClient.request(url: anyNamed("url"), method: anyNamed("method"), body: anyNamed("body")))
+    when(httpClient.request(
+            url: anyNamed("url"),
+            method: anyNamed("method"),
+            body: anyNamed("body")))
         .thenThrow(HttpError.serverError);
 
     expect(sut.auth(params), throwsA(DomainError.unexpected));
-
   });
 
-  test("Should throw InvalidCre if HttpClient returns 401", () async {
-    when(httpClient.request(url: anyNamed("url"), method: anyNamed("method"), body: anyNamed("body")))
+  test("Should throw InvalidCredentials if HttpClient returns 401", () async {
+    when(httpClient.request(
+            url: anyNamed("url"),
+            method: anyNamed("method"),
+            body: anyNamed("body")))
         .thenThrow(HttpError.unauthorized);
 
     expect(sut.auth(params), throwsA(DomainError.invalidCredentials));
-
   });
 
+  test("Should an Account if HttpClient returns 200", () async {
+    final token = faker.guid.guid();
+
+    when(httpClient.request(
+            url: anyNamed("url"),
+            method: anyNamed("method"),
+            body: anyNamed("body")))
+        .thenAnswer(
+            (_) async => {"accessToken": token, "name": faker.person.name()});
+
+    final account = await sut.auth(params);
+
+    expect(account.token, token);
+  });
 }
