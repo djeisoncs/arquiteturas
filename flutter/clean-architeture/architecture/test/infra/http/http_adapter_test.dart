@@ -12,9 +12,10 @@ class HttpAdapter {
   HttpAdapter(this.client);
 
   Future<void> request(
-      {@required String url, @required String method, body}) async {
+      {@required String url, @required String method, Map body}) async {
     final headers = await _headers();
-    await client.post(Uri.parse(url), headers: headers, body: jsonEncode(body));
+    String json = body != null ? jsonEncode(body) : null;
+    await client.post(Uri.parse(url), headers: headers, body: json);
   }
 
   Future<Map<String, String>> _headers() async {
@@ -47,7 +48,8 @@ main() {
       await sut.request(url: url, method: "post", body: body);
 
       verify(
-          client.post(Uri.parse(url),
+          client.post(
+              Uri.parse(url),
               headers: {
                 "content-Type": "application/json",
                 "accept": "application/json",
@@ -55,6 +57,12 @@ main() {
               body: jsonEncode(body)
           )
       );
+    });
+
+    test("Should call post without body", () async {
+      await sut.request(url: url, method: "post");
+
+      verify(client.post(any, headers: anyNamed("headers")));
     });
   });
 }
