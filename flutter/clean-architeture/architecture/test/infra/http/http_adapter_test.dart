@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 import 'package:faker/faker.dart';
 import 'package:http/http.dart';
@@ -10,9 +11,10 @@ class HttpAdapter {
 
   HttpAdapter(this.client);
 
-  Future<void> request({@required String url, @required String method, Map body}) async {
+  Future<void> request(
+      {@required String url, @required String method, body}) async {
     final headers = await _headers();
-    await client.post(Uri.parse(url), headers: headers);
+    await client.post(Uri.parse(url), headers: headers, body: jsonEncode(body));
   }
 
   Future<Map<String, String>> _headers() async {
@@ -28,7 +30,6 @@ class HttpAdapter {
 class ClientSpy extends Mock implements Client {}
 
 main() {
-
   ClientSpy client;
   HttpAdapter sut;
   String url;
@@ -41,14 +42,17 @@ main() {
 
   group("post", () {
     test("Should call post with correct values", () async {
-      await sut.request(url: url, method: "post");
+      Map body = {'any_key': 'any_value'};
+
+      await sut.request(url: url, method: "post", body: body);
 
       verify(
           client.post(Uri.parse(url),
               headers: {
                 "content-Type": "application/json",
                 "accept": "application/json",
-              }
+              },
+              body: jsonEncode(body)
           )
       );
     });
