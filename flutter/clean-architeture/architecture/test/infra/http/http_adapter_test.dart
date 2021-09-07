@@ -29,13 +29,18 @@ class ClientSpy extends Mock implements Client {}
 
 main() {
 
+  ClientSpy client;
+  HttpAdapter sut;
+  String url;
+
+  setUp(() {
+    client = ClientSpy();
+    sut = HttpAdapter(client);
+    url = faker.internet.httpsUrl();
+  });
 
   group("post", () {
     test("Should call post with correct values", () async {
-      final client = ClientSpy();
-      final sut = HttpAdapter(client);
-      final url = faker.internet.httpsUrl();
-
       await sut.request(url: url, method: "post");
 
       verify(
