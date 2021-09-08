@@ -1,10 +1,12 @@
 import 'dart:convert';
 
-import 'package:architecture/infra/http/http.dart';
 import 'package:faker/faker.dart';
 import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+
+import 'package:architecture/data/http/http.dart';
+import 'package:architecture/infra/http/http.dart';
 
 class ClientSpy extends Mock implements Client {}
 
@@ -72,6 +74,7 @@ main() {
 
     test("Should return null if post returns 204", () async {
       mockResponse(204);
+
       final response = await sut.request(url: url, method: "post");
 
       expect(response, null);
@@ -79,9 +82,22 @@ main() {
 
     test("Should return null if post returns 204 with data", () async {
       mockResponse(204, body: jsonEncode(body));
+
       final response = await sut.request(url: url, method: "post");
 
       expect(response, null);
+    });
+
+    test("Should return BadRequestError if post returns 400", () async {
+      mockResponse(400);
+
+      expect(sut.request(url: url, method: "post"), throwsA(HttpError.badRequest));
+    });
+
+    test("Should return BadRequestError if post returns 400", () async {
+      mockResponse(400, body: '');
+
+      expect(sut.request(url: url, method: "post"), throwsA(HttpError.badRequest));
     });
   });
 }
