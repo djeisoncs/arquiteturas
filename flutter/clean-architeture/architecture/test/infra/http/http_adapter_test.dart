@@ -100,6 +100,13 @@ main() {
       expect(sut.request(url: url, method: "post"), throwsA(HttpError.badRequest));
     });
 
+
+    test("Should return UnathorizedError if post returns 401", () async {
+      mockResponse(401);
+
+      expect(sut.request(url: url, method: "post"), throwsA(HttpError.unauthorized));
+    });
+
     test("Should return BadRequestError if post returns 500", () async {
       mockResponse(500);
 
