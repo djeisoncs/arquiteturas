@@ -99,5 +99,11 @@ main() {
 
       expect(sut.request(url: url, method: "post"), throwsA(HttpError.badRequest));
     });
+
+    test("Should return BadRequestError if post returns 500", () async {
+      mockResponse(500);
+
+      expect(sut.request(url: url, method: "post"), throwsA(HttpError.serverError));
+    });
   });
 }
