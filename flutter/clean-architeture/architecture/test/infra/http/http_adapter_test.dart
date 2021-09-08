@@ -88,14 +88,14 @@ main() {
       expect(response, null);
     });
 
-    test("Should return BadRequestError if post returns 400", () async {
-      mockResponse(400);
+    test("Should return BadRequestError if post returns 400 returns data", () async {
+      mockResponse(400, body: jsonEncode(body));
 
       expect(sut.request(url: url, method: "post"), throwsA(HttpError.badRequest));
     });
 
     test("Should return BadRequestError if post returns 400", () async {
-      mockResponse(400, body: '');
+      mockResponse(400);
 
       expect(sut.request(url: url, method: "post"), throwsA(HttpError.badRequest));
     });
