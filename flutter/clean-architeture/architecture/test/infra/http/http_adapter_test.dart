@@ -100,11 +100,22 @@ main() {
       expect(sut.request(url: url, method: "post"), throwsA(HttpError.badRequest));
     });
 
-
     test("Should return UnathorizedError if post returns 401", () async {
       mockResponse(401);
 
       expect(sut.request(url: url, method: "post"), throwsA(HttpError.unauthorized));
+    });
+
+    test("Should return Forbidden if post returns 403", () async {
+      mockResponse(403);
+
+      expect(sut.request(url: url, method: "post"), throwsA(HttpError.forbidden));
+    });
+
+    test("Should return NotFoundError if post returns 404", () async {
+      mockResponse(404);
+
+      expect(sut.request(url: url, method: "post"), throwsA(HttpError.notFound));
     });
 
     test("Should return BadRequestError if post returns 500", () async {
