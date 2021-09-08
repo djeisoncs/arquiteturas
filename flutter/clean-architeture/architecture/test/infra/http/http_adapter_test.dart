@@ -37,6 +37,10 @@ main() {
       mockRequest().thenAnswer((_) async => Response(body, statusCode));
     }
 
+    void mockError() {
+      mockRequest().thenThrow(Exception());
+    }
+
     setUp(() {
       body = {'any_key': 'any_value'};
 
@@ -126,8 +130,14 @@ main() {
       expect(sut.request(url: url, method: "post"), throwsA(HttpError.notFound));
     });
 
-    test("Should return BadRequestError if post returns 500", () async {
+    test("Should return ServerError if post returns 500", () async {
       mockResponse(500);
+
+      expect(sut.request(url: url, method: "post"), throwsA(HttpError.serverError));
+    });
+
+    test("Should return ServerError if post throws", () async {
+      mockError();
 
       expect(sut.request(url: url, method: "post"), throwsA(HttpError.serverError));
     });
