@@ -1,43 +1,57 @@
 import 'package:flutter/material.dart';
 
+import '../components/components.dart';
+
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              child: Image(
-                image: AssetImage('lib/ui/assets/logo.png'),
-              ),
-            ),
-            Text('Login'.toUpperCase()),
-            Form(
+            LoginHeader(),
+            HeadLine1(text: 'Login'),
+            Padding(
+              padding: EdgeInsets.all(32),
+              child: Form(
                 child: Column(
                   children: <Widget>[
                     TextField(
                       decoration: InputDecoration(
-                        labelText: 'Email',
-                        icon: Icon(Icons.email)
-                      ),
+                          labelText: 'Email',
+                          icon: Icon(
+                            Icons.email,
+                            color: Theme.of(context).primaryColorLight,
+                          )),
                       keyboardType: TextInputType.emailAddress,
                     ),
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Senha',
-                        icon: Icon(Icons.lock)
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 8,
+                        bottom: 32,
                       ),
-                      obscureText: true,
+                      child: TextField(
+                        decoration: InputDecoration(
+                            labelText: 'Senha',
+                            icon: Icon(Icons.lock,
+                                color: Theme.of(context).primaryColorLight)),
+                        obscureText: true,
+                      ),
                     ),
-                    ElevatedButton(onPressed: () {}, child: Text("Entrar"),),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text("Entrar"),
+                    ),
                     TextButton.icon(
                       onPressed: () {},
                       icon: Icon(Icons.person),
                       label: Text('Criar Conta'),
                     ),
                   ],
-                ),),
+                ),
+              ),
+            ),
           ],
         ),
       ),
