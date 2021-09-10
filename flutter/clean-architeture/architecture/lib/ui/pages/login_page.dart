@@ -23,7 +23,9 @@ class LoginPage extends StatelessWidget {
                           icon: Icon(
                             Icons.email,
                             color: Theme.of(context).primaryColorLight,
-                          )),
+                          ),
+
+                      ),
                       keyboardType: TextInputType.emailAddress,
                     ),
                     Padding(
@@ -40,7 +42,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: null,
                       child: Text("Entrar"),
                     ),
                     TextButton.icon(
