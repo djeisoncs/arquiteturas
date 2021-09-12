@@ -57,7 +57,7 @@ void main() {
   }
 
   tearDown(() {
-    _closeStreams()
+    _closeStreams();
   });
 
   testWidgets('Shold load with correct inicial state',
