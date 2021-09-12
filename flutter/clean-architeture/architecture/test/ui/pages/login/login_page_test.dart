@@ -49,15 +49,15 @@ void main() {
   }
 
   void _closeStreams() {
-    _closeStreams();
-  }
-
-  tearDown(() {
     emailErrorController.close();
     passwordErrorController.close();
     mainErrorController.close();
     isFormValidController.close();
     isLoadingController.close();
+  }
+
+  tearDown(() {
+    _closeStreams()
   });
 
   testWidgets('Shold load with correct inicial state',
