@@ -71,4 +71,30 @@ void main() {
 
     expect(find.text('any error'), findsOneWidget);
   });
+
+  testWidgets('Shold present no error if email is valid with value null', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add(null);
+    await tester.pump();
+
+
+    expect(find.descendant(
+        of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
+      findsOneWidget
+    );
+  });
+
+  testWidgets('Shold present no error if email is valid with value is empty', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add('');
+    await tester.pump();
+
+
+    expect(find.descendant(
+        of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
+      findsOneWidget
+    );
+  });
 }
