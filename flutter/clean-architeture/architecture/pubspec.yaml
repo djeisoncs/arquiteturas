@@ -17,6 +17,7 @@ dependencies:
   jwt_decode: ^0.3.1
   cupertino_icons: ^1.0.2
   http:
+  provider:
 
 dev_dependencies:
   flutter_test:
