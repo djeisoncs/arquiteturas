@@ -13,9 +13,9 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
 
   String _email;
   String _password;
-  var _emailError = RxString(null);
-  var _passwordError = RxString(null);
-  var _mainError = RxString(null);
+  var _emailError = RxString('');
+  var _passwordError = RxString('');
+  var _mainError = RxString('');
   var _isFormValid = false.obs;
   var _isLoading = false.obs;
 
