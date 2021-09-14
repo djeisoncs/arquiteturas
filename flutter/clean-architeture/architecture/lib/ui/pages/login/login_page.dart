@@ -16,6 +16,14 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
+  void _hidekeyboard() {
+    final currentFocus = FocusScope.of(context);
+
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -40,39 +48,42 @@ class _LoginPageState extends State<LoginPage> {
             }
           });
 
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                LoginHeader(),
-                HeadLine1(text: 'Login'),
-                Padding(
-                  padding: EdgeInsets.all(32),
-                  child: Provider(
-                    create: (_) => widget.presenter,
-                    child: Form(
-                      child: Column(
-                        children: <Widget>[
-                          EmailInput(),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: 8,
-                              bottom: 32,
+          return GestureDetector(
+            onTap: _hidekeyboard,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  LoginHeader(),
+                  HeadLine1(text: 'Login'),
+                  Padding(
+                    padding: EdgeInsets.all(32),
+                    child: Provider(
+                      create: (_) => widget.presenter,
+                      child: Form(
+                        child: Column(
+                          children: <Widget>[
+                            EmailInput(),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: 8,
+                                bottom: 32,
+                              ),
+                              child: PasswordInput(),
                             ),
-                            child: PasswordInput(),
-                          ),
-                          LoginButton(),
-                          TextButton.icon(
-                            onPressed: () {},
-                            icon: Icon(Icons.person),
-                            label: Text('Criar Conta'),
-                          ),
-                        ],
+                            LoginButton(),
+                            TextButton.icon(
+                              onPressed: () {},
+                              icon: Icon(Icons.person),
+                              label: Text('Criar Conta'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
