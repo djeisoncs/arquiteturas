@@ -39,10 +39,24 @@ void main() {
   });
 
   group('fetchSecure', () {
+    void mockFetchSecure() {
+      when(secureStorage.read(key: anyNamed('key'))).thenAnswer((_) async => value);
+    }
+
+    setUp(() {
+      mockFetchSecure();
+    });
+
     test('Shoud call fetch secure with correct value', () async {
       await sut.fetchSecure(key);
 
       verify(secureStorage.read(key: key));
+    });
+
+    test('Shoud return correct value on sucess', () async {
+      final featchValue = await sut.fetchSecure(key);
+
+      expect(featchValue, value);
     });
   });
 }
