@@ -1,5 +1,5 @@
 import '../../../data/usecases/authentication/authentication.dart';
-import '../../../domain/usecases/authentication.dart';
+import '../../../domain/usecases/usercases.dart';
 
 import '../factories.dart';
 

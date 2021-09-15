@@ -2,23 +2,28 @@ import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:architecture/domain/entities/account_entity.dart';
-import 'package:architecture/domain/helpers/domain_error.dart';
-import 'package:architecture/domain/usecases/authentication.dart';
+import 'package:architecture/domain/entities/entities.dart';
+import 'package:architecture/domain/helpers/helpers.dart';
+import 'package:architecture/domain/usecases/usercases.dart';
 
 import 'package:architecture/presentetion/protocols/protocols.dart';
 import 'package:architecture/presentetion/presenters/presenter.dart';
+
 
 class ValidationSpy extends Mock implements Validation {}
 
 class AuthenticationSpy extends Mock implements Authentication {}
 
+class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
+
 void main() {
   GetxLoginPresenter sut;
   ValidationSpy validation;
   AuthenticationSpy authentication;
+  SaveCurrentAccountSpy saveCurrentAccount;
   String email;
   String password;
+  String token;
 
   PostExpectation mockValidationCall(String field) =>
       when(validation.validate(field: field == null ? anyNamed('field') : field, value: anyNamed('value')));
@@ -28,16 +33,22 @@ void main() {
 
   PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
 
-  void mockAuthentication() => mockAuthenticationCall().thenAnswer((_) async => AccountEntity(faker.guid.guid()));
+  void mockAuthentication() => mockAuthenticationCall().thenAnswer((_) async => AccountEntity(token));
 
   void mockAuthenticationError(DomainError error) => mockAuthenticationCall().thenThrow(error);
 
   setUp(() {
     validation = ValidationSpy();
     authentication = AuthenticationSpy();
-    sut = GetxLoginPresenter(validation: validation, authentication: authentication);
+    saveCurrentAccount = SaveCurrentAccountSpy();
+    sut = GetxLoginPresenter(
+        validation: validation,
+        authentication: authentication,
+        saveCurrentAccount: saveCurrentAccount
+    );
     email = faker.internet.email();
     password = faker.internet.password();
+    token = faker.guid.guid();
     mockValidation();
     mockAuthentication();
   });
@@ -119,6 +130,15 @@ void main() {
     await sut.auth();
 
     verify(authentication.auth(AuthenticationParams(email: email, password: password))).called(1);
+  });
+
+  test('Should call SaveCurrentAccount with correct value', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    await sut.auth();
+
+    verify(saveCurrentAccount.save(AccountEntity(token))).called(1);
   });
 
   test('Should emits correct events on Authentication success', () async {
