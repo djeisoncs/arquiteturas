@@ -252,4 +252,18 @@ void main() {
     expect(Get.currentRoute, '/any_root');
     expect(find.text('fake page'), findsOneWidget);
   });
+
+
+
+  testWidgets('Shold not change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('');
+    await tester.pump();
+    expect(Get.currentRoute, '/login');
+
+    navigateToController.add(null);
+    await tester.pump();
+    expect(Get.currentRoute, '/login');
+  });
 }
