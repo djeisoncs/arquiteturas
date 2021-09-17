@@ -40,7 +40,7 @@ void main() {
   testWidgets('Shold call loadCurrentAccont on page load', (WidgetTester tester) async {
     await loadPage(tester);
 
-    verify(presenter.loadCurrentAccont()).called(1);
+    verify(presenter.checkAccont()).called(1);
   });
   
   testWidgets('Shold change page', (WidgetTester tester) async {
