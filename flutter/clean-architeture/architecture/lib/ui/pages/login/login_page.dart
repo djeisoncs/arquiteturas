@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import '../../../utils/i18n/i18n.dart';
 import 'components/components.dart';
 import 'login_presenter.dart';
 
@@ -51,7 +52,7 @@ class LoginPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   LoginHeader(),
-                  HeadLine1(text: 'Login'),
+                  HeadLine1(text: R.strings.login),
                   Padding(
                     padding: EdgeInsets.all(32),
                     child: Provider(
@@ -71,7 +72,7 @@ class LoginPage extends StatelessWidget {
                             TextButton.icon(
                               onPressed: () {},
                               icon: Icon(Icons.person),
-                              label: Text('Criar Conta'),
+                              label: Text(R.strings.addAccount),
                             ),
                           ],
                         ),
