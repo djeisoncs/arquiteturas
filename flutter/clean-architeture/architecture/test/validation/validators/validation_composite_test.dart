@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
+import 'package:architecture/presentetion/protocols/protocols.dart';
+
 import 'package:architecture/validation/validators/validators.dart';
 import 'package:architecture/validation/protocols/filed_validation.dart';
 
@@ -12,15 +14,15 @@ void main() {
   FieldValidationSpy validation2;
   FieldValidationSpy validation3;
 
-  void mockValidation1(String error) {
+  void mockValidation1(ValidationError error) {
     when(validation1.validate(any)).thenReturn(error);
   }
 
-  void mockValidation2(String error) {
+  void mockValidation2(ValidationError error) {
     when(validation2.validate(any)).thenReturn(error);
   }
 
-  void mockValidation3(String error) {
+  void mockValidation3(ValidationError error) {
     when(validation3.validate(any)).thenReturn(error);
   }
 
@@ -42,16 +44,14 @@ void main() {
   });
 
   test('Should return null if all validations returns null or empty', () {
-    mockValidation2('');
-
     expect(sut.validate(field: 'any_field', value: 'any_values'), null);
   });
 
   test('Should return the first error', () {
-    mockValidation1('error_1');
-    mockValidation2('error_2');
-    mockValidation3('error_3');
+    mockValidation1(ValidationError.requiredField);
+    mockValidation2(ValidationError.requiredField);
+    mockValidation3(ValidationError.invalidField);
 
-    expect(sut.validate(field: 'any_field', value: 'any_value'), 'error_2');
+    expect(sut.validate(field: 'any_field', value: 'any_value'), ValidationError.requiredField);
   });
 }

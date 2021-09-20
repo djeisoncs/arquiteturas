@@ -6,25 +6,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 
+import 'package:architecture/ui/helpers/errors/errors.dart';
 import 'package:architecture/ui/pages/pages.dart';
-import 'package:architecture/ui/pages/login/login.dart';
 
 class LoginPresenterMock extends Mock implements LoginPresenter {}
 
 void main() {
   LoginPresenterMock presenter;
 
-  StreamController<String> emailErrorController;
-  StreamController<String> passwordErrorController;
-  StreamController<String> mainErrorController;
+  StreamController<UIError> emailErrorController;
+  StreamController<UIError> passwordErrorController;
+  StreamController<UIError> mainErrorController;
   StreamController<String> navigateToController;
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadingController;
 
   void _initStreams() {
-    emailErrorController = StreamController<String>();
-    passwordErrorController = StreamController<String>();
-    mainErrorController = StreamController<String>();
+    emailErrorController = StreamController<UIError>();
+    passwordErrorController = StreamController<UIError>();
+    mainErrorController = StreamController<UIError>();
     navigateToController = StreamController<String>();
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
@@ -112,10 +112,21 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    emailErrorController.add('any error');
+    emailErrorController.add(UIError.invalidField);
     await tester.pump();
 
-    expect(find.text('any error'), findsOneWidget);
+    expect(find.text('Campo inválido'), findsOneWidget);
+  });
+
+
+  testWidgets('Shold present error if email is empty',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add(UIError.requiredField);
+    await tester.pump();
+
+    expect(find.text('Campo obrigatório'), findsOneWidget);
   });
 
   testWidgets('Shold present no error if email is valid with value null',
@@ -131,27 +142,14 @@ void main() {
         findsOneWidget);
   });
 
-  testWidgets('Shold present no error if email is valid with value is empty',
-      (WidgetTester tester) async {
-    await loadPage(tester);
-
-    emailErrorController.add('');
-    await tester.pump();
-
-    expect(
-        find.descendant(
-            of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
-        findsOneWidget);
-  });
-
   testWidgets('Shold present error if password is invalid',
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    passwordErrorController.add('any error');
+    passwordErrorController.add(UIError.requiredField);
     await tester.pump();
 
-    expect(find.text('any error'), findsOneWidget);
+    expect(find.text('Campo obrigatório'), findsOneWidget);
   });
 
   testWidgets('Shold present no error if password is valid with value null',
@@ -159,19 +157,6 @@ void main() {
     await loadPage(tester);
 
     passwordErrorController.add(null);
-    await tester.pump();
-
-    expect(
-        find.descendant(
-            of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
-        findsOneWidget);
-  });
-
-  testWidgets('Shold present no error if password is valid with value is empty',
-      (WidgetTester tester) async {
-    await loadPage(tester);
-
-    passwordErrorController.add('');
     await tester.pump();
 
     expect(
@@ -191,7 +176,7 @@ void main() {
     expect(button.onPressed, isNotNull);
   });
 
-  testWidgets('Shold enable button if form is invalid',
+  testWidgets('Shold disable button if form is invalid',
       (WidgetTester tester) async {
     await loadPage(tester);
 
@@ -234,13 +219,23 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('Shold present error message if authenticatio fails', (WidgetTester tester) async {
+  testWidgets('Shold present error message if authentication fails', (WidgetTester tester) async {
     await loadPage(tester);
 
-    mainErrorController.add('main error');
+    mainErrorController.add(UIError.invalidCredentials);
     await tester.pump();
 
-    expect(find.text('main error'), findsOneWidget);
+    expect(find.text('Credenciais inválidas'), findsOneWidget);
+  });
+
+
+  testWidgets('Shold present error message if authentication throws', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    mainErrorController.add(UIError.unexpected);
+    await tester.pump();
+
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve'), findsOneWidget);
   });
 
   testWidgets('Shold change page', (WidgetTester tester) async {
