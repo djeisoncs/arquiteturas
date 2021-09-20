@@ -225,7 +225,7 @@ void main() {
     mainErrorController.add(UIError.invalidCredentials);
     await tester.pump();
 
-    expect(find.text('Credenciais inválidas'), findsOneWidget);
+    expect(find.text('Credenciais inválidas.'), findsOneWidget);
   });
 
 
@@ -235,7 +235,7 @@ void main() {
     mainErrorController.add(UIError.unexpected);
     await tester.pump();
 
-    expect(find.text('Algo errado aconteceu. Tente novamente em breve'), findsOneWidget);
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
   });
 
   testWidgets('Shold change page', (WidgetTester tester) async {
