@@ -10,17 +10,18 @@ import '../../models/models.dart';
 import 'remote_add_account_params.dart';
 
 
-class RemoteAddAccount {
+class RemoteAddAccount implements AddAccount {
   final HttpClient httpClient;
   final String url;
 
   RemoteAddAccount({@required this.httpClient, @required this.url});
 
-  Future<void> add(AddAccountParams params) async {
+  Future<AccountEntity> add(AddAccountParams params) async {
     final body = RemoteAddAccountParams.fromDomain(params).toJson();
 
     try {
-      await httpClient.request(url: url, method: 'post', body: body);
+      final response = await httpClient.request(url: url, method: 'post', body: body);
+      return RemoteAccountModel.fromJson(response).toEntity();
     } on HttpError catch(error) {
       throw error == HttpError.forbidden
           ? DomainError.emailInUse
