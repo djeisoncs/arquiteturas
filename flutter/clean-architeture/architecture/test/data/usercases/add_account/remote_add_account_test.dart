@@ -58,4 +58,28 @@ main() {
         })
     );
   });
+
+  test("Should throw UnexpectedError if HttpClient returns 400", () async {
+    mockHttpError(HttpError.badRequest);
+
+    expect(sut.add(params), throwsA(DomainError.unexpected));
+  });
+
+  test("Should throw UnexpectedError if HttpClient returns 404", () async {
+    mockHttpError(HttpError.notFound);
+
+    expect(sut.add(params), throwsA(DomainError.unexpected));
+  });
+
+  test("Should throw InvalidCre if HttpClient returns 500", () async {
+    mockHttpError(HttpError.serverError);
+
+    expect(sut.add(params), throwsA(DomainError.unexpected));
+  });
+
+  test("Should throw InvalidCredentials if HttpClient returns 403", () async {
+    mockHttpError(HttpError.forbidden);
+
+    expect(sut.add(params), throwsA(DomainError.emailInUse));
+  });
 }
