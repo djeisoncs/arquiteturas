@@ -5,9 +5,11 @@ abstract class Translations {
   String get msgUnexpectedError;
 
   String get addAccount;
+  String get confirmPassword;
   String get email;
   String get enter;
   String get login;
+  String get name;
   String get password;
   String get wait;
 
@@ -18,9 +20,11 @@ abstract class Translations {
     'msgUnexpectedError': msgUnexpectedError,
 
     'addAccount': addAccount,
+    'confirmPassword': confirmPassword,
     'email': email,
     'enter': enter,
     'login': login,
+    'name': name,
     'password': password,
     'wait': wait,
   };
