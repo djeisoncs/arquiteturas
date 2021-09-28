@@ -7,13 +7,18 @@ import '../signup.dart';
 class PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        labelText: R.strings.password,
-        icon:
-        Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
-      ),
-      obscureText: true,
-    );
+    final presenter = Provider.of<SingnupPresenter>(context);
+    return StreamBuilder<UIError>(
+      stream: presenter.passwordErrorStream,
+      builder: (context, snapshot) {
+        return TextField(
+          decoration: InputDecoration(
+            labelText: R.strings.password,
+            icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
+          ),
+          obscureText: true,
+          onChanged: presenter.validatePassword,
+        );
+    });
   }
 }

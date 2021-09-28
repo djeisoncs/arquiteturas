@@ -9,21 +9,25 @@ import 'package:mockito/mockito.dart';
 import 'package:architecture/ui/helpers/errors/errors.dart';
 import 'package:architecture/ui/pages/pages.dart';
 
-class LoginPresenterMock extends Mock implements SingnupPresenter {}
+class SignupPresenterMock extends Mock implements SingnupPresenter {}
 
 void main() {
-  LoginPresenterMock presenter;
+  SingnupPresenter presenter;
 
+  StreamController<UIError> nameErrorController;
   StreamController<UIError> emailErrorController;
   StreamController<UIError> passwordErrorController;
+  StreamController<UIError> passwordConfirmationErrorController;
   StreamController<UIError> mainErrorController;
   StreamController<String> navigateToController;
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadingController;
 
   void _initStreams() {
+    nameErrorController = StreamController<UIError>();
     emailErrorController = StreamController<UIError>();
     passwordErrorController = StreamController<UIError>();
+    passwordConfirmationErrorController = StreamController<UIError>();
     mainErrorController = StreamController<UIError>();
     navigateToController = StreamController<String>();
     isFormValidController = StreamController<bool>();
@@ -31,10 +35,14 @@ void main() {
   }
 
   void _initMocksStreams() {
+    when(presenter.nameErrorStream)
+        .thenAnswer((_) => nameErrorController.stream);
     when(presenter.emailErrorStream)
         .thenAnswer((_) => emailErrorController.stream);
     when(presenter.passwordErrorStream)
         .thenAnswer((_) => passwordErrorController.stream);
+    when(presenter.passwordConfirmationErrorStream)
+        .thenAnswer((_) => passwordConfirmationErrorController.stream);
     when(presenter.mainErrorStream)
         .thenAnswer((_) => mainErrorController.stream);
     when(presenter.navigateToStream)
@@ -46,7 +54,7 @@ void main() {
   }
 
   Future<void> loadPage(WidgetTester tester) async {
-    presenter = LoginPresenterMock();
+    presenter = SignupPresenterMock();
     _initStreams();
     _initMocksStreams();
     final signUpPage = GetMaterialApp(
@@ -60,8 +68,9 @@ void main() {
   }
 
   void _closeStreams() {
-    emailErrorController.close();
+    nameErrorController.close();
     passwordErrorController.close();
+    passwordConfirmationErrorController.close();
     mainErrorController.close();
     navigateToController.close();
     isFormValidController.close();
@@ -78,28 +87,24 @@ void main() {
 
     final nameTextChildren = find.descendant(
         of: find.bySemanticsLabel('Nome'), matching: find.byType(Text));
-
     expect(nameTextChildren, findsOneWidget,
         reason:
             'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
 
     final emailTextChildren = find.descendant(
         of: find.bySemanticsLabel('Email'), matching: find.byType(Text));
-
     expect(emailTextChildren, findsOneWidget,
         reason:
             'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
 
     final passwordTextChildren = find.descendant(
         of: find.bySemanticsLabel('Senha'), matching: find.byType(Text));
-
     expect(passwordTextChildren, findsOneWidget,
         reason:
             'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
 
     final passwordConfirmationTextChildren = find.descendant(
-        of: find.bySemanticsLabel('Confirmar Senha'), matching: find.byType(Text));
-
+        of: find.bySemanticsLabel('Confirmar senha'), matching: find.byType(Text));
     expect(passwordConfirmationTextChildren, findsOneWidget,
         reason:
             'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
@@ -108,4 +113,25 @@ void main() {
     expect(button.onPressed, null);
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
+
+  testWidgets('Shold call validade with correct values',
+          (WidgetTester tester) async {
+        await loadPage(tester);
+
+        final name = faker.person.name();
+        await tester.enterText(find.bySemanticsLabel('Nome'), name);
+        verify(presenter.validateName(name));
+
+        final email = faker.internet.email();
+        await tester.enterText(find.bySemanticsLabel('Email'), email);
+        verify(presenter.validateEmail(email));
+
+        final password = faker.internet.password();
+
+        await tester.enterText(find.bySemanticsLabel('Senha'), password);
+        verify(presenter.validatePassword(password));
+
+        await tester.enterText(find.bySemanticsLabel('Confirmar senha'), password);
+        verify(presenter.validatePasswordConfirmation(password));
+      });
 }

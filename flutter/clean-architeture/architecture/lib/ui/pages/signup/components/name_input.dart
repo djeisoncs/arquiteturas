@@ -10,7 +10,7 @@ class NameInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final presenter = Provider.of<SingnupPresenter>(context);
     return StreamBuilder<UIError>(
-        stream: presenter.emailErrorStream,
+        stream: presenter.nameErrorStream,
         builder: (context, snapshot) {
           return TextField(
             decoration: InputDecoration(
@@ -22,7 +22,7 @@ class NameInput extends StatelessWidget {
               errorText: snapshot.hasData ? snapshot.data.description : null,
             ),
             keyboardType: TextInputType.name,
-            onChanged: presenter.validateEmail,
+            onChanged: presenter.validateName,
           );
         });
   }
