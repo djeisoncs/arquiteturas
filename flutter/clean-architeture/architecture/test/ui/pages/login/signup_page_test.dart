@@ -86,8 +86,7 @@ void main() {
     _closeStreams();
   });
 
-  testWidgets('Shold load with correct inicial state',
-      (WidgetTester tester) async {
+  testWidgets('Shold load with correct inicial state', (WidgetTester tester) async {
     await loadPage(tester);
 
     final nameTextChildren = find.descendant(
@@ -142,98 +141,114 @@ void main() {
   });
 
   testWidgets('Shold present email error', (WidgetTester tester) async {
-      await loadPage(tester);
+    await loadPage(tester);
 
-      emailErrorController.add(UIError.invalidField);
-      await tester.pump();
-      expect(find.text('Campo inválido'), findsOneWidget);
+    emailErrorController.add(UIError.invalidField);
+    await tester.pump();
+    expect(find.text('Campo inválido'), findsOneWidget);
 
-      emailErrorController.add(UIError.requiredField);
-      await tester.pump();
-      expect(find.text('Campo obrigatório'), findsOneWidget);
+    emailErrorController.add(UIError.requiredField);
+    await tester.pump();
+    expect(find.text('Campo obrigatório'), findsOneWidget);
 
-      emailErrorController.add(null);
-      await tester.pump();
-      expect(
-          find.descendant(
-              of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
-          findsOneWidget);
+    emailErrorController.add(null);
+    await tester.pump();
+    expect(
+        find.descendant(
+            of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
+        findsOneWidget);
   });
 
   testWidgets('Shold present name error', (WidgetTester tester) async {
-      await loadPage(tester);
+    await loadPage(tester);
 
-      nameErrorController.add(UIError.invalidField);
-      await tester.pump();
-      expect(find.text('Campo inválido'), findsOneWidget);
+    nameErrorController.add(UIError.invalidField);
+    await tester.pump();
+    expect(find.text('Campo inválido'), findsOneWidget);
 
-      nameErrorController.add(UIError.requiredField);
-      await tester.pump();
-      expect(find.text('Campo obrigatório'), findsOneWidget);
+    nameErrorController.add(UIError.requiredField);
+    await tester.pump();
+    expect(find.text('Campo obrigatório'), findsOneWidget);
 
-      nameErrorController.add(null);
-      await tester.pump();
-      expect(
-          find.descendant(
-              of: find.bySemanticsLabel('Nome'), matching: find.byType(Text)),
-          findsOneWidget);
+    nameErrorController.add(null);
+    await tester.pump();
+    expect(
+        find.descendant(
+            of: find.bySemanticsLabel('Nome'), matching: find.byType(Text)),
+        findsOneWidget);
   });
 
   testWidgets('Shold present password error', (WidgetTester tester) async {
-      await loadPage(tester);
+    await loadPage(tester);
 
-      passwordErrorController.add(UIError.invalidField);
-      await tester.pump();
-      expect(find.text('Campo inválido'), findsOneWidget);
+    passwordErrorController.add(UIError.invalidField);
+    await tester.pump();
+    expect(find.text('Campo inválido'), findsOneWidget);
 
-      passwordErrorController.add(UIError.requiredField);
-      await tester.pump();
-      expect(find.text('Campo obrigatório'), findsOneWidget);
+    passwordErrorController.add(UIError.requiredField);
+    await tester.pump();
+    expect(find.text('Campo obrigatório'), findsOneWidget);
 
-      passwordErrorController.add(null);
-      await tester.pump();
-      expect(
-          find.descendant(
-              of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
-          findsOneWidget);
+    passwordErrorController.add(null);
+    await tester.pump();
+    expect(
+        find.descendant(
+            of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
+        findsOneWidget);
   });
 
   testWidgets('Shold present passwordConfirmation error', (WidgetTester tester) async {
-      await loadPage(tester);
+    await loadPage(tester);
 
-      passwordConfirmationErrorController.add(UIError.invalidField);
-      await tester.pump();
-      expect(find.text('Campo inválido'), findsOneWidget);
+    passwordConfirmationErrorController.add(UIError.invalidField);
+    await tester.pump();
+    expect(find.text('Campo inválido'), findsOneWidget);
 
-      passwordConfirmationErrorController.add(UIError.requiredField);
-      await tester.pump();
-      expect(find.text('Campo obrigatório'), findsOneWidget);
+    passwordConfirmationErrorController.add(UIError.requiredField);
+    await tester.pump();
+    expect(find.text('Campo obrigatório'), findsOneWidget);
 
-      passwordConfirmationErrorController.add(null);
-      await tester.pump();
-      expect(
-          find.descendant(
-              of: find.bySemanticsLabel('Confirmar senha'), matching: find.byType(Text)),
-          findsOneWidget);
+    passwordConfirmationErrorController.add(null);
+    await tester.pump();
+    expect(
+        find.descendant(
+            of: find.bySemanticsLabel('Confirmar senha'),
+            matching: find.byType(Text)),
+        findsOneWidget);
   });
 
   testWidgets('Shold enable button if form is valid', (WidgetTester tester) async {
+      await loadPage(tester);
+
+      isFormValidController.add(true);
+      await tester.pump();
+
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(button.onPressed, isNotNull);
+  });
+
+  testWidgets('Shold disable button if form is invalid', (WidgetTester tester) async {
+      await loadPage(tester);
+
+      isFormValidController.add(false);
+      await tester.pump();
+
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(button.onPressed, null);
+  });
+
+
+
+  testWidgets('Shold call signUp on form submit', (WidgetTester tester) async {
         await loadPage(tester);
+        final button = find.byType(ElevatedButton);
 
         isFormValidController.add(true);
         await tester.pump();
-
-        final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-        expect(button.onPressed, isNotNull);
-      });
-
-  testWidgets('Shold disable button if form is invalid', (WidgetTester tester) async {
-        await loadPage(tester);
-
-        isFormValidController.add(false);
+        await tester.ensureVisible(button);
+        await tester.tap(button);
         await tester.pump();
 
-        final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-        expect(button.onPressed, null);
-      });
+        verify(presenter.signUp()).called(1);
+  });
 }

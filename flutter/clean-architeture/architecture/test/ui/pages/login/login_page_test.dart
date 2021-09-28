@@ -190,10 +190,12 @@ void main() {
   testWidgets('Shold call authentication on form submit',
       (WidgetTester tester) async {
     await loadPage(tester);
+    final button = find.byType(ElevatedButton);
 
     isFormValidController.add(true);
     await tester.pump();
-    await tester.tap(find.byType(ElevatedButton));
+    await tester.ensureVisible(button);
+    await tester.tap(button);
     await tester.pump();
 
     verify(presenter.auth()).called(1);
