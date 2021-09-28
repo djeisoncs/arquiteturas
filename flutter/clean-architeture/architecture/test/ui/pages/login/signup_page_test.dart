@@ -289,4 +289,26 @@ void main() {
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
   });
+
+  testWidgets('Shold change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('/any_root');
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/any_root');
+    expect(find.text('fake page'), findsOneWidget);
+  });
+
+  testWidgets('Shold not change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('');
+    await tester.pump();
+    expect(Get.currentRoute, '/signup');
+
+    navigateToController.add(null);
+    await tester.pump();
+    expect(Get.currentRoute, '/signup');
+  });
 }
