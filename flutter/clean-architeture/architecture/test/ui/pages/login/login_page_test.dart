@@ -230,7 +230,6 @@ void main() {
     expect(find.text('Credenciais inválidas.'), findsOneWidget);
   });
 
-
   testWidgets('Shold present error message if authentication throws', (WidgetTester tester) async {
     await loadPage(tester);
 
