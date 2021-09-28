@@ -216,4 +216,24 @@ void main() {
               of: find.bySemanticsLabel('Confirmar senha'), matching: find.byType(Text)),
           findsOneWidget);
   });
+
+  testWidgets('Shold enable button if form is valid', (WidgetTester tester) async {
+        await loadPage(tester);
+
+        isFormValidController.add(true);
+        await tester.pump();
+
+        final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+        expect(button.onPressed, isNotNull);
+      });
+
+  testWidgets('Shold disable button if form is invalid', (WidgetTester tester) async {
+        await loadPage(tester);
+
+        isFormValidController.add(false);
+        await tester.pump();
+
+        final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+        expect(button.onPressed, null);
+      });
 }
