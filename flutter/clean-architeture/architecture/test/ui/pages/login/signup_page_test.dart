@@ -59,16 +59,21 @@ void main() {
     _initMocksStreams();
     final signUpPage = GetMaterialApp(
       initialRoute: '/signup',
-        getPages: [
-          GetPage(name: '/signup', page: () => SignUpPage(presenter)),
-          GetPage(name: '/any_root', page: () => Scaffold(body: Text("fake page"),))
-        ],
+      getPages: [
+        GetPage(name: '/signup', page: () => SignUpPage(presenter)),
+        GetPage(
+            name: '/any_root',
+            page: () => Scaffold(
+                  body: Text("fake page"),
+                ))
+      ],
     );
     await tester.pumpWidget(signUpPage);
   }
 
   void _closeStreams() {
     nameErrorController.close();
+    emailErrorController.close();
     passwordErrorController.close();
     passwordConfirmationErrorController.close();
     mainErrorController.close();
@@ -104,7 +109,8 @@ void main() {
             'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
 
     final passwordConfirmationTextChildren = find.descendant(
-        of: find.bySemanticsLabel('Confirmar senha'), matching: find.byType(Text));
+        of: find.bySemanticsLabel('Confirmar senha'),
+        matching: find.byType(Text));
     expect(passwordConfirmationTextChildren, findsOneWidget,
         reason:
             'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
@@ -115,23 +121,80 @@ void main() {
   });
 
   testWidgets('Shold call validade with correct values',
-          (WidgetTester tester) async {
-        await loadPage(tester);
+      (WidgetTester tester) async {
+    await loadPage(tester);
 
-        final name = faker.person.name();
-        await tester.enterText(find.bySemanticsLabel('Nome'), name);
-        verify(presenter.validateName(name));
+    final name = faker.person.name();
+    await tester.enterText(find.bySemanticsLabel('Nome'), name);
+    verify(presenter.validateName(name));
 
-        final email = faker.internet.email();
-        await tester.enterText(find.bySemanticsLabel('Email'), email);
-        verify(presenter.validateEmail(email));
+    final email = faker.internet.email();
+    await tester.enterText(find.bySemanticsLabel('Email'), email);
+    verify(presenter.validateEmail(email));
 
-        final password = faker.internet.password();
+    final password = faker.internet.password();
 
-        await tester.enterText(find.bySemanticsLabel('Senha'), password);
-        verify(presenter.validatePassword(password));
+    await tester.enterText(find.bySemanticsLabel('Senha'), password);
+    verify(presenter.validatePassword(password));
 
-        await tester.enterText(find.bySemanticsLabel('Confirmar senha'), password);
-        verify(presenter.validatePasswordConfirmation(password));
-      });
+    await tester.enterText(find.bySemanticsLabel('Confirmar senha'), password);
+    verify(presenter.validatePasswordConfirmation(password));
+  });
+
+  testWidgets('Shold present email error', (WidgetTester tester) async {
+      await loadPage(tester);
+
+      emailErrorController.add(UIError.invalidField);
+      await tester.pump();
+      expect(find.text('Campo inválido'), findsOneWidget);
+
+      emailErrorController.add(UIError.requiredField);
+      await tester.pump();
+      expect(find.text('Campo obrigatório'), findsOneWidget);
+
+      emailErrorController.add(null);
+      await tester.pump();
+      expect(
+          find.descendant(
+              of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
+          findsOneWidget);
+  });
+
+  testWidgets('Shold present name error', (WidgetTester tester) async {
+      await loadPage(tester);
+
+      nameErrorController.add(UIError.invalidField);
+      await tester.pump();
+      expect(find.text('Campo inválido'), findsOneWidget);
+
+      nameErrorController.add(UIError.requiredField);
+      await tester.pump();
+      expect(find.text('Campo obrigatório'), findsOneWidget);
+
+      nameErrorController.add(null);
+      await tester.pump();
+      expect(
+          find.descendant(
+              of: find.bySemanticsLabel('Nome'), matching: find.byType(Text)),
+          findsOneWidget);
+  });
+
+  testWidgets('Shold present password error', (WidgetTester tester) async {
+      await loadPage(tester);
+
+      passwordErrorController.add(UIError.invalidField);
+      await tester.pump();
+      expect(find.text('Campo inválido'), findsOneWidget);
+
+      passwordErrorController.add(UIError.requiredField);
+      await tester.pump();
+      expect(find.text('Campo obrigatório'), findsOneWidget);
+
+      passwordErrorController.add(null);
+      await tester.pump();
+      expect(
+          find.descendant(
+              of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
+          findsOneWidget);
+  });
 }

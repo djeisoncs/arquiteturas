@@ -15,10 +15,7 @@ class EmailInput extends StatelessWidget {
           return TextField(
             decoration: InputDecoration(
               labelText: R.strings.email,
-              icon: Icon(
-                Icons.email,
-                color: Theme.of(context).primaryColorLight,
-              ),
+              icon: Icon(Icons.email, color: Theme.of(context).primaryColorLight),
               errorText: snapshot.hasData ? snapshot.data.description : null,
             ),
             keyboardType: TextInputType.emailAddress,
