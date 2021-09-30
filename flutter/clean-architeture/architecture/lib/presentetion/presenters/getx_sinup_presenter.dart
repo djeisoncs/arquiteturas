@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
-import '../../ui/pages/login/login.dart';
+import '../../ui/pages/pages.dart';
 import '../../ui/helpers/errors/errors.dart';
 
 import '../../domain/usecases/usercases.dart';
@@ -9,7 +9,7 @@ import '../../domain/helpers/domain_error.dart';
 
 import '../protocols/protocols.dart';
 
-class GetxSignUpPresenter extends GetxController  {
+class GetxSignUpPresenter extends GetxController /*implements SignupPresenter*/  {
   final Validation validation;
 
   String _email;
@@ -74,9 +74,27 @@ class GetxSignUpPresenter extends GetxController  {
   }
 
   void _validateForm() {
-    _isFormValid.value = false;//_emailError.value == null && _email != null;
+    _isFormValid.value =
+        _emailError.value == null && _email != null
+        && _nameError.value == null && _name != null
+        && _passwordError.value == null && _password != null
+        && _passwordConfirmationError.value == null && _passwordConfirmation  != null;
   }
 
   @override
   void dispose() {}
+
+  @override
+  // TODO: implement mainErrorStream
+  Stream<UIError> get mainErrorStream => throw UnimplementedError();
+
+  @override
+  // TODO: implement navigateToStream
+  Stream<String> get navigateToStream => throw UnimplementedError();
+
+  @override
+  Future<void> signUp() {
+    // TODO: implement signUp
+    throw UnimplementedError();
+  }
 }

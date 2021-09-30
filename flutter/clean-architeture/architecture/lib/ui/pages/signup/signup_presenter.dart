@@ -1,6 +1,6 @@
 import '../../helpers/errors/errors.dart';
 
-abstract class SingnupPresenter {
+abstract class SignupPresenter {
   Stream<UIError> get nameErrorStream;
 
   Stream<UIError> get emailErrorStream;

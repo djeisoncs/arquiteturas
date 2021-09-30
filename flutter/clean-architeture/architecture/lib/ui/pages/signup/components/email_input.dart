@@ -8,7 +8,7 @@ import '../signup.dart';
 class EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final presenter = Provider.of<SingnupPresenter>(context);
+    final presenter = Provider.of<SignupPresenter>(context);
     return StreamBuilder<UIError>(
         stream: presenter.emailErrorStream,
         builder: (context, snapshot) {

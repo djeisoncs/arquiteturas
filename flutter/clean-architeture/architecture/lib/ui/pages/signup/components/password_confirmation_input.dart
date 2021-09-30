@@ -7,7 +7,7 @@ import '../signup.dart';
 class PasswordConfirmationInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final presenter = Provider.of<SingnupPresenter>(context);
+    final presenter = Provider.of<SignupPresenter>(context);
     return StreamBuilder<UIError>(
       stream: presenter.passwordConfirmationErrorStream,
       builder: (context, snapshot) {

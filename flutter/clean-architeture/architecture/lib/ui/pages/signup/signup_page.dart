@@ -9,7 +9,7 @@ import 'components/components.dart';
 import 'signup_presenter.dart';
 
 class SignUpPage extends StatelessWidget {
-  final SingnupPresenter presenter;
+  final SignupPresenter presenter;
 
   SignUpPage(this.presenter);
 

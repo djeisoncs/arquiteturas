@@ -9,10 +9,10 @@ import 'package:mockito/mockito.dart';
 import 'package:architecture/ui/helpers/errors/errors.dart';
 import 'package:architecture/ui/pages/pages.dart';
 
-class SignupPresenterMock extends Mock implements SingnupPresenter {}
+class SignupPresenterMock extends Mock implements SignupPresenter {}
 
 void main() {
-  SingnupPresenter presenter;
+  SignupPresenter presenter;
 
   StreamController<UIError> nameErrorController;
   StreamController<UIError> emailErrorController;
