@@ -23,6 +23,7 @@ class GetxSignUpPresenter extends GetxController /*implements SignupPresenter*/ 
   var _nameError = Rx<UIError>(null);
   var _passwordError = Rx<UIError>(null);
   var _passwordConfirmationError = Rx<UIError>(null);
+  var _mainError = Rx<UIError>(null);
   var _isFormValid = false.obs;
   var _isLoading = false.obs;
 
@@ -30,6 +31,7 @@ class GetxSignUpPresenter extends GetxController /*implements SignupPresenter*/ 
   Stream<UIError> get nameErrorStream => _nameError.stream;
   Stream<UIError> get passwordErrorStream => _passwordError.stream;
   Stream<UIError> get passwordConfirmationErrorStream => _passwordConfirmationError.stream;
+  Stream<UIError> get mainErrorStream => _mainError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
   Stream<bool> get isLoadingStream => _isLoading.stream;
 
@@ -89,28 +91,24 @@ class GetxSignUpPresenter extends GetxController /*implements SignupPresenter*/ 
   void dispose() {}
 
   @override
-  // TODO: implement mainErrorStream
-  Stream<UIError> get mainErrorStream => throw UnimplementedError();
-
-  @override
   // TODO: implement navigateToStream
   Stream<String> get navigateToStream => throw UnimplementedError();
 
   @override
   Future<void> signUp() async {
-    // try {
-    //   _isLoading.value = true;
+    try {
+      _isLoading.value = true;
 
       final account = await addAccount.add(AddAccountParams(name: _name, email: _email, password: _password, passwordConfirmation: _passwordConfirmation));
       await saveCurrentAccount.save(account);
     //   _navigateTo.value = '/surveys';
-    // } on DomainError catch (error) {
-    //   switch(error) {
-    //     case DomainError.invalidCredentials: _mainError.value = UIError.invalidCredentials; break;
-    //     default: _mainError.value = UIError.unexpected;
-    //   }
-    //
-    //   _isLoading.value = false;
-    // }
+    } on DomainError catch (error) {
+      switch(error) {
+        case DomainError.invalidCredentials: _mainError.value = UIError.invalidCredentials; break;
+        default: _mainError.value = UIError.unexpected;
+      }
+
+      _isLoading.value = false;
+    }
   }
 }
