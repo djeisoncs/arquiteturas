@@ -12,6 +12,7 @@ import '../protocols/protocols.dart';
 class GetxSignUpPresenter extends GetxController /*implements SignupPresenter*/  {
   final Validation validation;
   final AddAccount addAccount;
+  final SaveCurrentAccount saveCurrentAccount;
 
   String _email;
   String _name;
@@ -35,6 +36,7 @@ class GetxSignUpPresenter extends GetxController /*implements SignupPresenter*/ 
   GetxSignUpPresenter({
     @required this.validation,
     @required this.addAccount,
+    @required this.saveCurrentAccount,
   });
 
   @override
@@ -100,7 +102,7 @@ class GetxSignUpPresenter extends GetxController /*implements SignupPresenter*/ 
     //   _isLoading.value = true;
 
       final account = await addAccount.add(AddAccountParams(name: _name, email: _email, password: _password, passwordConfirmation: _passwordConfirmation));
-    //   await saveCurrentAccount.save(account);
+      await saveCurrentAccount.save(account);
     //   _navigateTo.value = '/surveys';
     // } on DomainError catch (error) {
     //   switch(error) {
