@@ -11,6 +11,7 @@ import '../protocols/protocols.dart';
 
 class GetxSignUpPresenter extends GetxController /*implements SignupPresenter*/  {
   final Validation validation;
+  final AddAccount addAccount;
 
   String _email;
   String _name;
@@ -33,6 +34,7 @@ class GetxSignUpPresenter extends GetxController /*implements SignupPresenter*/ 
 
   GetxSignUpPresenter({
     @required this.validation,
+    @required this.addAccount,
   });
 
   @override
@@ -93,8 +95,20 @@ class GetxSignUpPresenter extends GetxController /*implements SignupPresenter*/ 
   Stream<String> get navigateToStream => throw UnimplementedError();
 
   @override
-  Future<void> signUp() {
-    // TODO: implement signUp
-    throw UnimplementedError();
+  Future<void> signUp() async {
+    // try {
+    //   _isLoading.value = true;
+
+      final account = await addAccount.add(AddAccountParams(name: _name, email: _email, password: _password, passwordConfirmation: _passwordConfirmation));
+    //   await saveCurrentAccount.save(account);
+    //   _navigateTo.value = '/surveys';
+    // } on DomainError catch (error) {
+    //   switch(error) {
+    //     case DomainError.invalidCredentials: _mainError.value = UIError.invalidCredentials; break;
+    //     default: _mainError.value = UIError.unexpected;
+    //   }
+    //
+    //   _isLoading.value = false;
+    // }
   }
 }

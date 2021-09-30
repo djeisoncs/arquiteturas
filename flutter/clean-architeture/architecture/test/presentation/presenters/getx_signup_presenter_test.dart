@@ -11,6 +11,7 @@ import 'package:architecture/ui/helpers/errors/errors.dart';
 import 'package:architecture/presentetion/protocols/protocols.dart';
 import 'package:architecture/presentetion/presenters/presenter.dart';
 
+class AddAccountSpy extends Mock implements AddAccount {}
 
 class ValidationSpy extends Mock implements Validation {}
 
@@ -18,27 +19,37 @@ class ValidationSpy extends Mock implements Validation {}
 void main() {
   GetxSignUpPresenter sut;
   ValidationSpy validation;
+  AddAccountSpy addAccount;
   String email;
   String name;
   String password;
   String passwordConfirmation;
+  String token;
 
   PostExpectation mockValidationCall(String field) =>
       when(validation.validate(field: field == null ? anyNamed('field') : field, value: anyNamed('value')));
 
+  PostExpectation mockAddAccountCall() => when(addAccount.add(any));
+
   void mockValidation({String field, ValidationError value}) => mockValidationCall(field).thenReturn(value);
+
+  void mockAddAccount() => mockAddAccountCall().thenAnswer((_) async => AccountEntity(token));
 
 
   setUp(() {
     validation = ValidationSpy();
+    addAccount = AddAccountSpy();
     sut = GetxSignUpPresenter(
         validation: validation,
+        addAccount: addAccount
     );
     email = faker.internet.email();
     name = faker.person.name();
     password = faker.internet.password();
     passwordConfirmation = faker.internet.password();
+    token = faker.guid.guid();
     mockValidation();
+    mockAddAccount();
   });
 
   test('Should call Validation with correct name', () {
@@ -56,7 +67,6 @@ void main() {
     sut.validateName(name);
     sut.validateName(name);
   });
-
 
   test('Should emit requiredFieldError if name is empty', () {
     mockValidation(value: ValidationError.requiredField);
@@ -92,7 +102,6 @@ void main() {
     sut.validateEmail(email);
   });
 
-
   test('Should emit requiredFieldError if email is empty', () {
     mockValidation(value: ValidationError.requiredField);
 
@@ -126,7 +135,6 @@ void main() {
     sut.validatePassword(password);
     sut.validatePassword(password);
   });
-
 
   test('Should emit requiredFieldError if password is empty', () {
     mockValidation(value: ValidationError.requiredField);
@@ -162,7 +170,6 @@ void main() {
     sut.validatePasswordConfirmation(passwordConfirmation);
   });
 
-
   test('Should emit requiredFieldError if passwordConfirmation is empty', () {
     mockValidation(value: ValidationError.requiredField);
 
@@ -192,6 +199,22 @@ void main() {
     await Future.delayed(Duration.zero);
     sut.validatePasswordConfirmation(passwordConfirmation);
     await Future.delayed(Duration.zero);
+  });
+
+  test('Should call AddAccount with correct values', () async {
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    await sut.signUp();
+
+    verify(addAccount.add(AddAccountParams(
+        name: name,
+        email: email,
+        password: password,
+        passwordConfirmation: passwordConfirmation
+    ))).called(1);
   });
 
 }
