@@ -91,9 +91,6 @@ class GetxSignUpPresenter extends GetxController implements SignupPresenter  {
   }
 
   @override
-  void dispose() {}
-
-  @override
   Future<void> signUp() async {
     try {
       _isLoading.value = true;
@@ -109,5 +106,10 @@ class GetxSignUpPresenter extends GetxController implements SignupPresenter  {
 
       _isLoading.value = false;
     }
+  }
+
+  @override
+  void goToLogin() {
+    _navigateTo.value = '/login';
   }
 }

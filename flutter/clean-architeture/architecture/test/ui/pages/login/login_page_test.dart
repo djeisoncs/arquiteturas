@@ -262,13 +262,13 @@ void main() {
   });
 
   testWidgets('Shold call gotoSignUp on link click', (WidgetTester tester) async {
-        await loadPage(tester);
+    await loadPage(tester);
 
-        final button = find.text('Criar conta');
-        await tester.ensureVisible(button);
-        await tester.tap(button);
-        await tester.pump();
+    final button = find.text('Criar conta');
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
 
-        verify(presenter.goToSignUp()).called(1);
-      });
+    verify(presenter.goToSignUp()).called(1);
+  });
 }
