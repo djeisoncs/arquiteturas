@@ -104,7 +104,7 @@ class GetxSignUpPresenter extends GetxController /*implements SignupPresenter*/ 
     //   _navigateTo.value = '/surveys';
     } on DomainError catch (error) {
       switch(error) {
-        case DomainError.invalidCredentials: _mainError.value = UIError.invalidCredentials; break;
+        case DomainError.emailInUse: _mainError.value = UIError.emailInUse; break;
         default: _mainError.value = UIError.unexpected;
       }
 
