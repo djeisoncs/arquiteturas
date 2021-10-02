@@ -252,7 +252,6 @@ void main() {
     await sut.signUp();
   });
 
-
   test('Should emits correct events on AddAccount success', () async {
     sut.validateName(name);
     sut.validateEmail(email);
@@ -262,7 +261,6 @@ void main() {
     expectLater(sut.isLoadingStream, emitsInOrder([true]));
     await sut.signUp();
   });
-
 
   test('Should emits correct events on EmailInUseError', () async {
     mockAddAccountError(DomainError.emailInUse);
@@ -286,6 +284,15 @@ void main() {
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(expectAsync1((error) => expect(error, UIError.unexpected)));
+
+    await sut.signUp();
+  });
+
+  test('Should change page on success', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
 
     await sut.signUp();
   });
