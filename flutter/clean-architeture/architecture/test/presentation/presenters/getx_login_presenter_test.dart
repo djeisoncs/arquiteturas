@@ -75,7 +75,6 @@ void main() {
     sut.validateEmail(email);
   });
 
-
   test('Should emit requiredFieldError if email is empty', () {
     mockValidation(value: ValidationError.requiredField);
 
@@ -200,5 +199,11 @@ void main() {
     sut.mainErrorStream.listen(expectAsync1((error) => expect(error, UIError.unexpected)));
 
     await sut.auth();
+  });
+
+  test('Should go to SignUpPage on link click', () {
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/signup')));
+
+    sut.goToSignUp();
   });
 }
