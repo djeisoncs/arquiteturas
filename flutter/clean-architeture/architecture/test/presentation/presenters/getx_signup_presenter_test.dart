@@ -249,4 +249,15 @@ void main() {
 
     await sut.signUp();
   });
+
+
+  test('Should emits correct events on AddAccount success', () async {
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true]));
+    await sut.signUp();
+  });
 }
