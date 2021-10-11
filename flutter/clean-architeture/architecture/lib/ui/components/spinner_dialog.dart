@@ -7,7 +7,8 @@ void showLoading(BuildContext context) {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return Dialog(
+        return WillPopScope(
+          onWillPop: () async => false,
           child: SimpleDialog(
             children: <Widget>[
               Column(
