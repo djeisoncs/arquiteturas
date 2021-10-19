@@ -10,7 +10,7 @@ import '../../models/models.dart';
 import './remote_authentication_params.dart';
 
 class RemoteAuthentication implements Authentication {
-  final HttpClient httpClient;
+  final HttpClient<Map> httpClient;
   final String url;
 
   RemoteAuthentication({@required this.httpClient, @required this.url});

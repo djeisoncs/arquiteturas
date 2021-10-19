@@ -8,7 +8,7 @@ import 'package:architecture/domain/usecases/usercases.dart';
 import 'package:architecture/data/usecases/usecases.dart';
 import 'package:architecture/data/http/http.dart';
 
-class HttpClientMock extends Mock implements HttpClient {}
+class HttpClientMock extends Mock implements HttpClient<Map> {}
 
 main() {
   RemoteAuthentication sut;
