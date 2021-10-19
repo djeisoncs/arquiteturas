@@ -19,11 +19,10 @@ main() {
   Map mockValidData() =>
       {"accessToken": faker.guid.guid(), "name": faker.person.name()};
 
-  PostExpectation mockRequest() =>
-      when(httpClient.request(
-          url: anyNamed('url'),
-          method: anyNamed('method'),
-          body: anyNamed('body')));
+  PostExpectation mockRequest() => when(httpClient.request(
+      url: anyNamed('url'),
+      method: anyNamed('method'),
+      body: anyNamed('body')));
 
   void mockHttpData(Map data) {
     mockRequest().thenAnswer((_) async => data);
@@ -39,24 +38,19 @@ main() {
         name: faker.person.name(),
         email: faker.internet.email(),
         password: faker.internet.password(),
-        passwordConfirmation: faker.internet.password()
-    );
+        passwordConfirmation: faker.internet.password());
     mockHttpData(mockValidData());
   });
 
   test("Should call HttpClient with correct method", () async {
     await sut.add(params);
 
-    verify(httpClient.request(
-        url: url,
-        method: "post",
-        body: {
-          "name": params.name,
-          "email": params.email,
-          "password": params.password,
-          "passwordConfirmation": params.passwordConfirmation
-        })
-    );
+    verify(httpClient.request(url: url, method: "post", body: {
+      "name": params.name,
+      "email": params.email,
+      "password": params.password,
+      "passwordConfirmation": params.passwordConfirmation
+    }));
   });
 
   test("Should throw UnexpectedError if HttpClient returns 400", () async {
@@ -94,9 +88,9 @@ main() {
   });
 
   test("Should throw Unexpected if HttpClient returns 200 with invalid data",
-          () async {
-        mockHttpData({"invalid_key": "invalid_value"});
+      () async {
+    mockHttpData({"invalid_key": "invalid_value"});
 
-        expect(sut.add(params), throwsA(DomainError.unexpected));
-      });
+    expect(sut.add(params), throwsA(DomainError.unexpected));
+  });
 }
