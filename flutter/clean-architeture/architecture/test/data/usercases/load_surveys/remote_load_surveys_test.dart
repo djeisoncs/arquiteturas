@@ -1,9 +1,11 @@
-import 'package:architecture/domain/entities/entities.dart';
 import 'package:faker/faker.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:architecture/domain/entities/entities.dart';
+
+import 'package:architecture/data/models/models.dart';
 import 'package:architecture/data/http/http.dart';
 
 class RemoteLoadSurveys {
@@ -12,8 +14,9 @@ class RemoteLoadSurveys {
 
   RemoteLoadSurveys({@required this.url, @required this.httpClient});
 
-  Future<void> load() async {
-    await httpClient.request(url: url, method: 'get');
+  Future<List<SurveyEntity>> load() async {
+    final response = await httpClient.request(url: url, method: 'get');
+    return response.map((json) => RemoteSurveyModel.fromJson(json).toEntity()).toList();
   }
 }
 
