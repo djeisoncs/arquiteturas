@@ -8,25 +8,25 @@ class RemoteSurveyModel {
   final String id;
   final String question;
   final String dateTime;
-  final bool didiAnswer;
+  final bool didAnswer;
 
   RemoteSurveyModel({
     @required this.id,
     @required this.question,
     @required this.dateTime,
-    @required this.didiAnswer
+    @required this.didAnswer
   });
 
   factory RemoteSurveyModel.fromJson(Map json) {
 
-    if (!json.keys.toSet().containsAll(['id', 'question', 'date', 'didiAnswer'])) {
+    if (!json.keys.toSet().containsAll(['id', 'question', 'didAnswer', 'date'])) {
       throw HttpError.invalidData;
     }
     return RemoteSurveyModel(
         id: json['id'],
         question: json['question'],
         dateTime: json['date'],
-        didiAnswer: json['didiAnswer']
+        didAnswer: json['didAnswer']
     );
   }
 
@@ -34,6 +34,6 @@ class RemoteSurveyModel {
     id: this.id,
     question: this.question,
     dateTime: DateTime.parse(this.dateTime),
-    didiAnswer: this.didiAnswer
+    didAnswer: this.didAnswer
   );
 }

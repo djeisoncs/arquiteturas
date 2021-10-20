@@ -1,30 +1,12 @@
 import 'package:architecture/domain/helpers/helpers.dart';
 import 'package:faker/faker.dart';
-import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:architecture/domain/entities/entities.dart';
 
-import 'package:architecture/data/models/models.dart';
+import 'package:architecture/data/usecases/usecases.dart';
 import 'package:architecture/data/http/http.dart';
-
-class RemoteLoadSurveys {
-  final String url;
-  final HttpClient<List<Map>> httpClient;
-
-  RemoteLoadSurveys({@required this.url, @required this.httpClient});
-
-  Future<List<SurveyEntity>> load() async {
-    try {
-      final response = await httpClient.request(url: url, method: 'get');
-
-      return response.map((json) => RemoteSurveyModel.fromJson(json).toEntity()).toList();
-    } on HttpError {
-      throw DomainError.unexpected;
-    }
-  }
-}
 
 class HttpClientSpy extends Mock implements HttpClient<List<Map>> {}
 
@@ -87,12 +69,12 @@ void main() {
           id: list[0]['id'],
           question: list[0]['question'],
           dateTime: DateTime.parse(list[0]['date']),
-          didiAnswer: list[0]['didiAnswer']),
+          didAnswer: list[0]['didiAnswer']),
       SurveyEntity(
           id: list[0]['id'],
           question: list[0]['question'],
           dateTime: DateTime.parse(list[0]['date']),
-          didiAnswer: list[0]['didiAnswer'])
+          didAnswer: list[0]['didiAnswer'])
     ]);
   });
 
@@ -112,5 +94,11 @@ void main() {
     mockHttpError(HttpError.serverError);
 
     expect(sut.load(), throwsA(DomainError.unexpected));
+  });
+
+  test("Should throw AcessDeniedError if HttpClient returns 403", () async {
+    mockHttpError(HttpError.forbidden);
+
+    expect(sut.load(), throwsA(DomainError.acessDenied));
   });
 }
