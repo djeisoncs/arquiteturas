@@ -107,4 +107,10 @@ void main() {
 
     expect(sut.load(), throwsA(DomainError.unexpected));
   });
+
+  test("Should throw UnexpectedError if HttpClient returns 500", () async {
+    mockHttpError(HttpError.serverError);
+
+    expect(sut.load(), throwsA(DomainError.unexpected));
+  });
 }
