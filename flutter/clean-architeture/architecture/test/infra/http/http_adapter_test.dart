@@ -190,5 +190,21 @@ main() {
       expect(response, null);
     });
 
+    test("Should return null if get returns 204", () async {
+      mockResponse(204);
+
+      final response = await sut.request(url: url, method: "get");
+
+      expect(response, null);
+    });
+
+    test("Should return null if get returns 204 with data", () async {
+      mockResponse(204, body: jsonEncode(body));
+
+      final response = await sut.request(url: url, method: "get");
+
+      expect(response, null);
+    });
+
   });
 }
