@@ -218,5 +218,11 @@ main() {
       expect(sut.request(url: url, method: "get"), throwsA(HttpError.badRequest));
     });
 
+    test("Should return UnathorizedError if get returns 401", () async {
+      mockResponse(401);
+
+      expect(sut.request(url: url, method: "get"), throwsA(HttpError.unauthorized));
+    });
+
   });
 }
