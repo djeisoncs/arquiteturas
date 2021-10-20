@@ -206,5 +206,17 @@ main() {
       expect(response, null);
     });
 
+    test("Should return BadRequestError if get returns 400 returns data", () async {
+      mockResponse(400, body: jsonEncode(body));
+
+      expect(sut.request(url: url, method: "get"), throwsA(HttpError.badRequest));
+    });
+
+    test("Should return BadRequestError if get returns 400", () async {
+      mockResponse(400);
+
+      expect(sut.request(url: url, method: "get"), throwsA(HttpError.badRequest));
+    });
+
   });
 }
