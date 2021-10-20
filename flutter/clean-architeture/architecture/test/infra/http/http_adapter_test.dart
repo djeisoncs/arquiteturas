@@ -241,5 +241,11 @@ main() {
 
       expect(sut.request(url: url, method: "get"), throwsA(HttpError.serverError));
     });
+
+    test("Should return ServerError if get throws", () async {
+      mockError();
+
+      expect(sut.request(url: url, method: "get"), throwsA(HttpError.serverError));
+    });
   });
 }
