@@ -224,5 +224,10 @@ main() {
       expect(sut.request(url: url, method: "get"), throwsA(HttpError.unauthorized));
     });
 
+    test("Should return Forbidden if get returns 403", () async {
+      mockResponse(403);
+
+      expect(sut.request(url: url, method: "get"), throwsA(HttpError.forbidden));
+    });
   });
 }
