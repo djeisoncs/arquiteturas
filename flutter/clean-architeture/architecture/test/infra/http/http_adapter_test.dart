@@ -174,5 +174,21 @@ main() {
           )
       );
     });
+
+    test("Should return data if get returns 200", () async {
+      mockResponse(200, body: jsonEncode(body));
+
+      final response = await sut.request(url: url, method: "get");
+
+      expect(response, body);
+    });
+
+    test("Should return null if get returns 200 with no data", () async {
+      mockResponse(200, body: '');
+      final response = await sut.request(url: url, method: "get");
+
+      expect(response, null);
+    });
+
   });
 }
