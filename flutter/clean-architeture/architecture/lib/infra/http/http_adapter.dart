@@ -11,58 +11,34 @@ class HttpAdapter implements HttpClient {
 
   HttpAdapter(this.client);
 
-
-
-  Future<Map<String, String>> _headers() async {
-    Map<String, String> headers = {
-      "content-Type": "application/json",
-      "accept": "application/json",
-    };
-
-    return headers;
-  }
-
-  @override
-  Future<Map> request({
-    @required String url,
-    @required String method,
-    Map body
-  }) async {
-
-    final headers = await _headers();
-
-    String json = body != null ? jsonEncode(body) : null;
-
+  Future<dynamic> request({@required String url, @required String method, Map body, Map headers}) async {
+    final defaultHeaders = headers?.cast<String, String>() ?? {}..addAll({
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    });
+    final jsonBody = body != null ? jsonEncode(body) : null;
     var response = Response('', 500);
-
     try {
       if (method == 'post') {
-        response = await client.post(Uri.parse(url), headers: headers, body: json);
+        response = await client.post(Uri.parse(url), headers: defaultHeaders, body: jsonBody);
       } else if (method == 'get') {
-        response = await client.get(Uri.parse(url), headers: headers);
+        response = await client.get(Uri.parse(url), headers: defaultHeaders);
       }
     } catch(error) {
       throw HttpError.serverError;
     }
-
     return _handleResponse(response);
   }
 
-  Map _handleResponse(Response response) {
-    if (response.statusCode == 200) {
-      return response.body.isEmpty ? null : jsonDecode(response.body);
-    } else if (response.statusCode == 204) {
-      return null;
-    } else if (response.statusCode == 400) {
-      throw HttpError.badRequest;
-    } else if (response.statusCode == 401) {
-      throw HttpError.unauthorized;
-    } else if (response.statusCode == 403) {
-      throw HttpError.forbidden;
-    } else if (response.statusCode == 404) {
-      throw HttpError.notFound;
+  dynamic _handleResponse(Response response) {
+    switch (response.statusCode) {
+      case 200: return response.body.isEmpty ? null : jsonDecode(response.body);
+      case 204: return null;
+      case 400: throw HttpError.badRequest;
+      case 401: throw HttpError.unauthorized;
+      case 403: throw HttpError.forbidden;
+      case 404: throw HttpError.notFound;
+      default: throw HttpError.serverError;
     }
-
-    throw HttpError.serverError;
   }
 }

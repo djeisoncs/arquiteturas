@@ -8,7 +8,7 @@ import 'package:architecture/domain/entities/entities.dart';
 import 'package:architecture/data/usecases/usecases.dart';
 import 'package:architecture/data/http/http.dart';
 
-class HttpClientSpy extends Mock implements HttpClient<List<Map>> {}
+class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
   RemoteLoadSurveys sut;
