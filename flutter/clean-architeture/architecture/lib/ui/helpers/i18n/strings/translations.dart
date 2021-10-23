@@ -12,6 +12,7 @@ abstract class Translations {
   String get login;
   String get name;
   String get password;
+  String get surveys;
   String get wait;
 
   Map<String, String> toJson() => {
@@ -27,6 +28,7 @@ abstract class Translations {
     'login': login,
     'name': name,
     'password': password,
+    'surveys': surveys,
     'wait': wait,
   };
 }
