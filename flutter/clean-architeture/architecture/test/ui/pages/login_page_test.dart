@@ -178,23 +178,24 @@ void main() {
     verify(presenter.auth()).called(1);
   });
 
-  testWidgets('Shold present loading', (WidgetTester tester) async {
+  testWidgets('Shold handle loading correctly', (WidgetTester tester) async {
     await loadPage(tester);
 
     isLoadingController.add(true);
     await tester.pump();
-
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-  });
 
-  testWidgets('Shold hide loading', (WidgetTester tester) async {
-    await loadPage(tester);
-
-    isLoadingController.add(true);
-    await tester.pump();
     isLoadingController.add(false);
     await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsNothing);
 
+
+    isLoadingController.add(true);
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    isLoadingController.add(null);
+    await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 

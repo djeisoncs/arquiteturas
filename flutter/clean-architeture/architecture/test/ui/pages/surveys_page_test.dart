@@ -69,15 +69,4 @@ void main() {
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
-
-  // testWidgets('Shold hide loading', (WidgetTester tester) async {
-  //   await loadPage(tester);
-  //
-  //   isLoadingController.add(true);
-  //   await tester.pump();
-  //   isLoadingController.add(false);
-  //   await tester.pump();
-  //
-  //   expect(find.byType(CircularProgressIndicator), findsNothing);
-  // });
 }
