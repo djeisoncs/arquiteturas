@@ -19,7 +19,7 @@ void showLoading(BuildContext context) {
                     height: 10,
                   ),
                   Text(
-                    R.strings.wait,
+                    R.string.wait,
                     textAlign: TextAlign.center,
                   ),
                 ],

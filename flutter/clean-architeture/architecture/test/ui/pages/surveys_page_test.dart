@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:architecture/ui/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
@@ -13,21 +14,23 @@ void main() {
   SurveysPresenterSpy presenter;
 
   StreamController<bool> isLoadingController;
+  StreamController<List<SurveyViewModel>> loadSurveysController;
 
   void _initStreams() {
     isLoadingController = StreamController<bool>();
+    loadSurveysController = StreamController<List<SurveyViewModel>>();
   }
 
-  void _initMocksStreams() {
-    when(presenter.isLoadingStream)
-        .thenAnswer((_) => isLoadingController.stream);
+  void _mockStreams() {
+    when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
+    when(presenter.loadSurveysStream).thenAnswer((_) => loadSurveysController.stream);
   }
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = SurveysPresenterSpy();
 
     _initStreams();
-    _initMocksStreams();
+    _mockStreams();
 
     final surveysPage = GetMaterialApp(
       initialRoute: '/surveys',
@@ -40,6 +43,7 @@ void main() {
 
   void _closeStreams() {
     isLoadingController.close();
+    loadSurveysController.close();
   }
 
   tearDown(() => _closeStreams());
@@ -68,5 +72,16 @@ void main() {
     isLoadingController.add(null);
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets('Shoul present error if loadSurveysStream fails', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    loadSurveysController.addError(UIError.unexpected.description);
+    await tester.pump();
+
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
+    expect(find.text('Recarregar'), findsOneWidget);
+    expect(find.text('Question 1'), findsNothing);
   });
 }

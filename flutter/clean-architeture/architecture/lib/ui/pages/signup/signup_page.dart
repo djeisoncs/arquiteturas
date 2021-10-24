@@ -53,7 +53,7 @@ class SignUpPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   LoginHeader(),
-                  HeadLine1(text: R.strings.addAccount),
+                  HeadLine1(text: R.string.addAccount),
                   Padding(
                     padding: EdgeInsets.all(32),
                     child: Provider(
@@ -75,7 +75,7 @@ class SignUpPage extends StatelessWidget {
                             TextButton.icon(
                               onPressed: presenter.goToLogin,
                               icon: Icon(Icons.exit_to_app),
-                              label: Text(R.strings.login),
+                              label: Text(R.string.login),
                             ),
                           ],
                         ),

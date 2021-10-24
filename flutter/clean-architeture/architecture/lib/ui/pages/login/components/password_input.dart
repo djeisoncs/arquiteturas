@@ -13,7 +13,7 @@ class PasswordInput extends StatelessWidget {
         builder: (context, snapshot) {
           return TextField(
             decoration: InputDecoration(
-              labelText: R.strings.password,
+              labelText: R.string.password,
               icon:
                   Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
               errorText: snapshot.hasData ? snapshot.data.description : null,

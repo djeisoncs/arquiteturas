@@ -1,4 +1,3 @@
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +6,7 @@ import '../../helpers/helpers.dart';
 
 import 'components/components.dart';
 import 'surveys_presenter.dart';
+import 'survey_viewmodel.dart';
 
 class SurveysPage extends StatelessWidget {
   final SurveysPresenter presenter;
@@ -18,7 +18,7 @@ class SurveysPage extends StatelessWidget {
     presenter.loadData();
     return Scaffold(
       appBar: AppBar(
-        title: Text(R.strings.surveys),
+        title: Text(R.string.surveys),
       ),
       body: Builder(
         builder: (context) {
@@ -30,16 +30,32 @@ class SurveysPage extends StatelessWidget {
             }
           });
 
-          return Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: CarouselSlider(
-              options: CarouselOptions(enlargeCenterPage: true, aspectRatio: 1),
-              items: [
-                SurveyItem(),
-                SurveyItem(),
-                SurveyItem(),
-              ],
-            ),
+          return StreamBuilder<List<SurveyViewModel>>(
+            stream: presenter.loadSurveysStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Column(
+                  children: [
+                    Text(snapshot.error),
+                    ElevatedButton(
+                        onPressed: null,
+                        child: Text(R.string.reload)
+                    ),
+                  ],
+                );
+              }
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: CarouselSlider(
+                  options: CarouselOptions(enlargeCenterPage: true, aspectRatio: 1),
+                  items: [
+                    SurveyItem(),
+                    SurveyItem(),
+                    SurveyItem(),
+                  ],
+                ),
+              );
+            }
           );
         },
       ),
