@@ -30,7 +30,7 @@ void showLoading(BuildContext context) {
       });
 }
 
-void hideLoaging(BuildContext context) {
+void hideLoading(BuildContext context) {
   if (Navigator.canPop(context)) {
     Navigator.of(context).pop();
   }

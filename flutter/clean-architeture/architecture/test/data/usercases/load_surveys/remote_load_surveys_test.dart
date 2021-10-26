@@ -99,6 +99,6 @@ void main() {
   test("Should throw AcessDeniedError if HttpClient returns 403", () async {
     mockHttpError(HttpError.forbidden);
 
-    expect(sut.load(), throwsA(DomainError.acessDenied));
+    expect(sut.load(), throwsA(DomainError.accessDenied));
   });
 }

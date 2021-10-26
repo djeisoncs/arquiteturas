@@ -15,12 +15,12 @@ class RemoteLoadSurveys implements LoadSurveys {
 
   Future<List<SurveyEntity>> load() async {
     try {
-      final response = await httpClient.request(url: url, method: 'get');
+      final httpResponse = await httpClient.request(url: url, method: 'get');
 
-      return new List<SurveyEntity>.from(response.map((json) => RemoteSurveyModel.fromJson(json).toEntity()).toList());
+      return httpResponse.map<SurveyEntity>((json) => RemoteSurveyModel.fromJson(json).toEntity()).toList();
     } on HttpError catch(error) {
       throw error == HttpError.forbidden
-          ? DomainError.acessDenied
+          ? DomainError.accessDenied
           : DomainError.unexpected;
     }
   }

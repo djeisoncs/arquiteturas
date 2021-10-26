@@ -26,7 +26,7 @@ class SurveysPage extends StatelessWidget {
             if (isLoading == true) {
               showLoading(context);
             } else {
-              hideLoaging(context);
+              hideLoading(context);
             }
           });
 
@@ -45,7 +45,6 @@ class SurveysPage extends StatelessWidget {
                 );
               }
               if (snapshot.hasData) {
-
                 return Padding(
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: CarouselSlider(
