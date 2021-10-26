@@ -45,8 +45,7 @@ void main() {
     });
 
     test('Should call post with correct values', () async {
-      await sut
-          .request(url: url, method: 'post', body: {'any_key': 'any_value'});
+      await sut.request(url: url, method: 'post', body: {'any_key': 'any_value'});
       verify(client.post(Uri.parse(url),
           headers: {
             'content-type': 'application/json',
@@ -54,11 +53,7 @@ void main() {
           },
           body: '{"any_key":"any_value"}'));
 
-      await sut.request(
-          url: url,
-          method: 'post',
-          body: {'any_key': 'any_value'},
-          headers: {'any_header': 'any_value'});
+      await sut.request(url: url, method: 'post', body: {'any_key': 'any_value'}, headers: {'any_header': 'any_value'});
       verify(client.post(Uri.parse(url),
           headers: {
             'content-type': 'application/json',
@@ -180,13 +175,14 @@ void main() {
 
     test('Should call get with correct values', () async {
       await sut.request(url: url, method: 'get');
+
       verify(client.get(Uri.parse(url), headers: {
         'content-type': 'application/json',
         'accept': 'application/json'
       }));
 
-      await sut.request(
-          url: url, method: 'get', headers: {'any_header': 'any_value'});
+      await sut.request(url: url, method: 'get', headers: {'any_header': 'any_value'});
+
       verify(client.get(Uri.parse(url), headers: {
         'content-type': 'application/json',
         'accept': 'application/json',
