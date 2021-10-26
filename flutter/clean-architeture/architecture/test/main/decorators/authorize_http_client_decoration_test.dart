@@ -16,12 +16,12 @@ class AuthorizeHttpClientDecorator implements HttpClient {
   });
 
   @override
-  Future<void> request({@required String url, @required String method, Map body, Map headers}) async {
+  Future<dynamic> request({@required String url, @required String method, Map body, Map headers}) async {
     final token = await featchSecureCacheStorage.fetchSecure('token');
 
     final athorizedHeaders = headers ?? {} ..addAll({'x-access-token': token});
 
-    await decoratee.request(url: url, method: method, body: body, headers: athorizedHeaders);
+    return await decoratee.request(url: url, method: method, body: body, headers: athorizedHeaders);
   }
 }
 
@@ -37,12 +37,24 @@ void main() {
   String url;
   String method;
   String token;
+  String httpResponse;
 
   Map body;
 
   void mockToken() {
     token = faker.guid.guid();
     when(featchSecureCacheStorage.fetchSecure(any)).thenAnswer((_) async => token);
+  }
+
+  void mockHttpResponse() {
+    httpResponse = faker.randomGenerator.string(50);
+
+    when(httpClient.request(
+      url: anyNamed('url'),
+      method: anyNamed('method'),
+      body: anyNamed('body'),
+      headers: anyNamed('headers')
+    )).thenAnswer((_) async => httpResponse);
   }
   
   setUp(() {
@@ -59,6 +71,7 @@ void main() {
     body = {'any_key': 'any_value'};
 
     mockToken();
+    mockHttpResponse();
   });
   
   test('Should call FetchSecureCacheStorage with correct key', () async {
@@ -73,5 +86,12 @@ void main() {
 
     await sut.request(url: url, method: method, body: body, headers: {'any_header': 'any_value'});
     verify(httpClient.request(url: url, method: method, body: body, headers: {'x-access-token': token, 'any_header': 'any_value'})).called(1);
+  });
+
+
+  test('Should return same result as decoratee', () async {
+    final response = await sut.request(url: url, method: method, body: body);
+
+    expect(response, httpResponse);
   });
 }
