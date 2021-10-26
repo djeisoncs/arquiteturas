@@ -1,36 +1,11 @@
 import 'package:faker/faker.dart';
-import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:architecture/main/decorators/decorators.dart';
 import 'package:architecture/data/http/http.dart';
 import 'package:architecture/data/cache/cache.dart';
 import 'package:architecture/data/http/http_client.dart';
-
-class AuthorizeHttpClientDecorator implements HttpClient {
-  final FeatchSecureCacheStorage featchSecureCacheStorage;
-  final HttpClient decoratee;
-
-  AuthorizeHttpClientDecorator({
-    @required this.featchSecureCacheStorage,
-    @required this.decoratee
-  });
-
-  @override
-  Future<dynamic> request({@required String url, @required String method, Map body, Map headers}) async {
-    try {
-      final token = await featchSecureCacheStorage.fetchSecure('token');
-
-      final athorizedHeaders = headers ?? {}..addAll({'x-access-token': token});
-
-      return await decoratee.request(url: url, method: method, body: body, headers: athorizedHeaders);
-    } on HttpError {
-      rethrow;
-    } catch(error) {
-      throw HttpError.forbidden;
-    }
-  }
-}
 
 class FeatchSecureCacheStorageSpy extends Mock implements FeatchSecureCacheStorage {}
 
