@@ -149,7 +149,7 @@ void main() {
     isFormValidController.add(true);
     await tester.pump();
 
-    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(button.onPressed, isNotNull);
   });
 
@@ -160,14 +160,14 @@ void main() {
     isFormValidController.add(false);
     await tester.pump();
 
-    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(button.onPressed, null);
   });
 
   testWidgets('Shold call authentication on form submit',
       (WidgetTester tester) async {
     await loadPage(tester);
-    final button = find.byType(ElevatedButton);
+    final button = find.byType(RaisedButton);
 
     isFormValidController.add(true);
     await tester.pump();
