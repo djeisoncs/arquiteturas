@@ -13,7 +13,7 @@ class GetxSurveysPresenter implements SurveysPresenter {
   GetxSurveysPresenter({@required this.loadSurveys});
 
   final _isLoading = true.obs;
-  final _surveys = Rx<List<SurveyViewModel>>([]);
+  final _surveys = Rx<List<SurveyViewModel>>();
 
   @override
   Stream<bool> get isLoadingStream => _isLoading.stream;

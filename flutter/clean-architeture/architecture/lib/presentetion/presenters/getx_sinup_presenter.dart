@@ -20,12 +20,12 @@ class GetxSignUpPresenter extends GetxController implements SignupPresenter  {
   String _password;
   String _passwordConfirmation;
 
-  var _emailError = Rx<UIError>(null);
-  var _nameError = Rx<UIError>(null);
-  var _passwordError = Rx<UIError>(null);
-  var _passwordConfirmationError = Rx<UIError>(null);
-  var _mainError = Rx<UIError>(null);
-  var _navigateTo = RxString('');
+  var _emailError = Rx<UIError>();
+  var _nameError = Rx<UIError>();
+  var _passwordError = Rx<UIError>();
+  var _passwordConfirmationError = Rx<UIError>();
+  var _mainError = Rx<UIError>();
+  var _navigateTo = RxString();
   var _isFormValid = false.obs;
   var _isLoading = false.obs;
 
