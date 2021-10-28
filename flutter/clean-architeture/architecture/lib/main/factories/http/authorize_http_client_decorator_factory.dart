@@ -1,9 +1,8 @@
-import 'package:http/http.dart';
-
 import '../../../data/http/http.dart';
-import '../../../infra/http/http.dart';
+import '../../decorators/decorators.dart';
+import '../../factories/factories.dart';
 
-HttpClient makeAuthorizeHttpAdapterDecorator() {
-  final client = Client();
-  return HttpAdapter(client);
-}
+HttpClient makeAuthorizeHttpClientDecorator() => AuthorizeHttpClientDecorator(
+    decoratee: makeHttpAdapter(),
+    featchSecureCacheStorage: makeSecureStorageAdapter()
+);
