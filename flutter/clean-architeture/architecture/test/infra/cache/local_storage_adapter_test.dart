@@ -1,8 +1,9 @@
-import 'package:architecture/infra/cache/cache.dart';
 import 'package:faker/faker.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+
+import 'package:architecture/infra/cache/cache.dart';
 
 class LocalStorageSpy extends Mock implements LocalStorage {}
 
@@ -12,8 +13,9 @@ void main() {
   String key;
   dynamic value;
 
-  void mockDeleteItemError() => when(localStorage.deleteItem(any)).thenThrow(Exception());
-  void mockSetItemError() => when(localStorage.setItem(any, any)).thenThrow(Exception());
+  void mockDeleteError() => when(localStorage.deleteItem(any)).thenThrow(Exception());
+
+  void mockSaveError() => when(localStorage.setItem(any, any)).thenThrow(Exception());
 
   setUp(() {
     key = faker.randomGenerator.string(5);
@@ -21,23 +23,25 @@ void main() {
     localStorage = LocalStorageSpy();
     sut = LocalStorageAdapter(localStorage: localStorage);
   });
-  
-  test('Shoud call localStorage with correct values', () async {
-    await sut.save(key: key, value: value);
-    
-    verify(localStorage.deleteItem(key)).called(1);
-    verify(localStorage.setItem(key, value)).called(1);
-  });
 
-  test('Shoud throw if deleteItem throws', () async {
-    mockDeleteItemError();
+  group('save', () {
+    test('Shoud call localStorage with correct values', () async {
+      await sut.save(key: key, value: value);
 
-    expect(sut.save(key: key, value: value), throwsA(TypeMatcher<Exception>()));
-  });
+      verify(localStorage.deleteItem(key)).called(1);
+      verify(localStorage.setItem(key, value)).called(1);
+    });
 
-  test('Shoud throw if setItem throws', () async {
-    mockSetItemError();
+    test('Shoud throw if deleteItem throws', () async {
+      mockDeleteError();
 
-    expect(sut.save(key: key, value: value), throwsA(TypeMatcher<Exception>()));
+      expect(sut.save(key: key, value: value), throwsA(TypeMatcher<Exception>()));
+    });
+
+    test('Shoud throw if setItem throws', () async {
+      mockSaveError();
+
+      expect(sut.save(key: key, value: value), throwsA(TypeMatcher<Exception>()));
+    });
   });
 }
