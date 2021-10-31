@@ -10,7 +10,7 @@ void main() {
   LocalStorageSpy localStorage;
   LocalStorageAdapter sut;
   String key;
-  String value;
+  dynamic value;
   
   setUp(() {
     key = faker.randomGenerator.string(5);
@@ -22,6 +22,12 @@ void main() {
   test('Shoud call localStorage with correct values', () async {
     await sut.save(key: key, value: value);
     
+    verify(localStorage.deleteItem(key)).called(1);
+
     verify(localStorage.setItem(key, value)).called(1);
+  });
+
+  test('', () async {
+
   });
 }
