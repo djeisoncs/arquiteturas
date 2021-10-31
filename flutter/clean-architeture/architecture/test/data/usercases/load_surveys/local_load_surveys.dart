@@ -1,4 +1,4 @@
-import 'package:architecture/data/models/models.dart';
+import 'package:architecture/domain/helpers/helpers.dart';
 import 'package:faker/faker.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
@@ -7,6 +7,7 @@ import 'package:test/test.dart';
 import 'package:architecture/domain/entities/entities.dart';
 import 'package:architecture/domain/usecases/usercases.dart';
 import 'package:architecture/data/cache/cache.dart';
+import 'package:architecture/data/models/models.dart';
 
 class LocalLoadSurveys implements LoadSurveys {
   final CacheStorage cacheStorage;
@@ -15,8 +16,13 @@ class LocalLoadSurveys implements LoadSurveys {
 
   @override
   Future<List<SurveyEntity>> load() async{
-    final response = await cacheStorage.fetch('surveys');
-    return response.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
+    final data = await cacheStorage.fetch('surveys');
+
+    if (data?.isEmpty != false) {
+      throw DomainError.unexpected;
+    }
+
+    return data.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
   }
 
 }
@@ -70,5 +76,17 @@ void main() {
       SurveyEntity(id: data[0]['id'], question: data[0]['question'], dateTime: DateTime.utc(2020, 7, 20), didAnswer: false),
       SurveyEntity(id: data[0]['id'], question: data[0]['question'], dateTime: DateTime.utc(2018, 2, 2), didAnswer: true)
     ]);
+  });  
+  
+  test('Should throw UnexpectedError if cache is empty', () async {
+    mockFetch([]);
+    
+    expect(sut.load(), throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw UnexpectedError if cache is null', () async {
+    mockFetch(null);
+
+    expect(sut.load(), throwsA(DomainError.unexpected));
   });
 }
