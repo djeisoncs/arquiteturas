@@ -20,7 +20,7 @@ class LocalLoadSurveys implements LoadSurveys {
 
     try {
       if (data?.isEmpty != false) {
-        throw DomainError.unexpected;
+        throw Exception();
       }
 
       return data.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
@@ -101,6 +101,17 @@ void main() {
         'question': faker.randomGenerator.string(50),
         'didAnswer': 'false',
         'date': 'invalid date'
+      }
+    ]);
+
+    expect(sut.load(), throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw UnexpectedError if cache is incomplete', () async {
+    mockFetch([
+      {
+        'didAnswer': 'false',
+        'date': '2020-07-20T00:00:00Z'
       }
     ]);
 
