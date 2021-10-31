@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../../data/cache/cache.dart';
 
-class LocalStorageAdapter /*implements CacheStorage*/ {
+class LocalStorageAdapter implements CacheStorage {
   final LocalStorage localStorage;
 
   LocalStorageAdapter({@required this.localStorage});
@@ -20,10 +20,8 @@ class LocalStorageAdapter /*implements CacheStorage*/ {
     await localStorage.deleteItem(key);
   }
 
-  //
-  // @override
-  // Future fetch(String key) {
-  //   // TODO: implement fetch
-  //   throw UnimplementedError();
-  // }
+  @override
+  Future<void> fetch(String key) async {
+    await localStorage.getItem(key);
+  }
 }
