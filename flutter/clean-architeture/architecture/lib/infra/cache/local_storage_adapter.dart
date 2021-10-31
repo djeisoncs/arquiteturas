@@ -15,11 +15,11 @@ class LocalStorageAdapter /*implements CacheStorage*/ {
     await localStorage.setItem(key, value);
   }
 
-  // @override
-  // Future<void> delete(String key) {
-  //   // TODO: implement delete
-  //   throw UnimplementedError();
-  // }
+  @override
+  Future<void> delete(String key) async {
+    await localStorage.deleteItem(key);
+  }
+
   //
   // @override
   // Future fetch(String key) {
