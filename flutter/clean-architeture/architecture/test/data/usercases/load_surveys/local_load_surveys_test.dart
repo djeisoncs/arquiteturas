@@ -165,5 +165,18 @@ void main() {
 
       verify(fetchCacheStorage.delete('surveys')).called(1);
     });
+
+    test('Should delete cache if it is incomplete', () async {
+      mockFetch([
+        {
+          'didAnswer': 'false',
+          'date': '2018-02-02T00:00:00Z'
+        }
+      ]);
+
+      await sut.validate();
+
+      verify(fetchCacheStorage.delete('surveys')).called(1);
+    });
   });
 }
