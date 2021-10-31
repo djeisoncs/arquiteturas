@@ -1,11 +1,12 @@
-import 'package:architecture/domain/helpers/helpers.dart';
 import 'package:faker/faker.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'package:architecture/domain/entities/entities.dart';
+import 'package:architecture/domain/helpers/helpers.dart';
 import 'package:architecture/domain/usecases/usercases.dart';
+
 import 'package:architecture/data/cache/cache.dart';
 import 'package:architecture/data/models/models.dart';
 
@@ -16,9 +17,9 @@ class LocalLoadSurveys implements LoadSurveys {
 
   @override
   Future<List<SurveyEntity>> load() async{
-    final data = await cacheStorage.fetch('surveys');
-
     try {
+      final data = await cacheStorage.fetch('surveys');
+
       if (data?.isEmpty != false) {
         throw Exception();
       }
@@ -53,10 +54,14 @@ void main() {
     }
   ];
 
+  PostExpectation mockCallsFetch () => when(fetchCacheStorage.fetch(any));
+
   void mockFetch(List<Map> list) {
     data = list;
-    when(fetchCacheStorage.fetch(any)).thenAnswer((_) async => data);
+    mockCallsFetch().thenAnswer((_) async => data);
   }
+
+  void mockFetchError() => mockCallsFetch().thenThrow(Exception());
 
   setUp(() {
     fetchCacheStorage = FetchCacheStorageSpy();
@@ -114,6 +119,12 @@ void main() {
         'date': '2020-07-20T00:00:00Z'
       }
     ]);
+
+    expect(sut.load(), throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw UnexpectedError if cache throws', () async {
+    mockFetchError();
 
     expect(sut.load(), throwsA(DomainError.unexpected));
   });
