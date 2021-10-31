@@ -199,10 +199,10 @@ void main() {
       SurveyEntity(id: faker.guid.guid(), question: faker.randomGenerator.string(50), dateTime: DateTime.utc(2018, 12, 20), didAnswer: false)
     ];
 
-    PostExpectation mockCallsFetch () => when(cacheStorage.fetch(any));
+    PostExpectation mockCallsSave () => when(cacheStorage.save(key: anyNamed('key'), value: anyNamed('value')));
 
 
-    void mockFetchError() => mockCallsFetch().thenThrow(Exception());
+    void mockSaveError() => mockCallsSave().thenThrow(Exception());
 
     setUp(() {
       cacheStorage = FetchCacheStorageSpy();
@@ -230,6 +230,12 @@ void main() {
       await sut.save(surveys);
 
       verify(cacheStorage.save(key: 'surveys', value: list)).called(1);
+    });
+
+    test('Should throw UnexpectedError if save throws', () async {
+      mockSaveError();
+
+      expect(sut.save(surveys), throwsA(DomainError.unexpected));
     });
   });
 }
