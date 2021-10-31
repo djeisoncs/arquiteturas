@@ -12,7 +12,7 @@ class LocalLoadSurveys implements LoadSurveys {
   LocalLoadSurveys({@required this.cacheStorage});
 
   @override
-  Future<List<SurveyEntity>> load() async{
+  Future<List<SurveyEntity>> load() async {
     try {
       final data = await cacheStorage.fetch('surveys');
 
@@ -24,6 +24,10 @@ class LocalLoadSurveys implements LoadSurveys {
     } catch(error) {
       throw DomainError.unexpected;
     }
+  }
+
+  Future<void> validate() async {
+    await cacheStorage.fetch('surveys');
   }
 
 }

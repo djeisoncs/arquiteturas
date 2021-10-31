@@ -49,7 +49,7 @@ void main() {
       mockFetch(mockValidData());
     });
 
-    test('Should call FeatchCacheStorage with correct key', () async {
+    test('Should call cacheStorage with correct key', () async {
       await sut.load();
 
       verify(fetchCacheStorage.fetch('surveys')).called(1);
@@ -107,7 +107,49 @@ void main() {
     });
   });
 
-  group('delete', () {
+  group('validate', () {
+    LocalLoadSurveys sut;
+    FetchCacheStorageSpy fetchCacheStorage;
+    List<Map> data;
+
+    List<Map> mockValidData() => [
+      {
+        'id': faker.guid.guid(),
+        'question': faker.randomGenerator.string(50),
+        'didAnswer': 'false',
+        'date': '2020-07-20T00:00:00Z'
+      },
+      {
+        'id': faker.guid.guid(),
+        'question': faker.randomGenerator.string(50),
+        'didAnswer': 'true',
+        'date': '2018-02-02T00:00:00Z'
+      }
+    ];
+
+    PostExpectation mockCallsFetch () => when(fetchCacheStorage.fetch(any));
+
+    void mockFetch(List<Map> list) {
+      data = list;
+      mockCallsFetch().thenAnswer((_) async => data);
+    }
+
+    void mockFetchError() => mockCallsFetch().thenThrow(Exception());
+
+    setUp(() {
+      fetchCacheStorage = FetchCacheStorageSpy();
+      sut = LocalLoadSurveys(
+          cacheStorage: fetchCacheStorage
+      );
+
+      mockFetch(mockValidData());
+    });
+
+    test('Should call cacheStorage with correct key', () async {
+      await sut.validate();
+
+      verify(fetchCacheStorage.fetch('surveys')).called(1);
+    });
 
   });
 }
