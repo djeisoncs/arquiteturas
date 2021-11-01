@@ -1,6 +1,6 @@
 import '../../../../validation/protocols/protocols.dart';
 import '../../../../presentetion/protocols/protocols.dart';
-import '../../../../validation/validators/validators.dart';
+import '../../../composites/composites.dart';
 import '../../../builders/builders.dart';
 
 Validation makeLoginValidation() => ValidationComposite(makeLoginValidations());
