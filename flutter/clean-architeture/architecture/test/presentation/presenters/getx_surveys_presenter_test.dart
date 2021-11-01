@@ -9,7 +9,7 @@ import 'package:architecture/domain/helpers/domain_error.dart';
 import 'package:architecture/ui/helpers/errors/errors.dart';
 import 'package:architecture/ui/pages/pages.dart';
 
-import 'package:architecture/presentetion/presenters/presenter.dart';
+import 'package:architecture/presentation/presenters/presenter.dart';
 
 class LoadSurveysSpy extends Mock implements LoadSurveys {}
 

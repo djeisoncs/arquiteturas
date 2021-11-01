@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import '../../presentetion/protocols/protocols.dart';
+import '../../presentation/protocols/protocols.dart';
 
 import '../protocols/protocols.dart';
 

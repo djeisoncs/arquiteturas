@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:architecture/presentetion/protocols/protocols.dart';
+import 'package:architecture/presentation/protocols/protocols.dart';
 import 'package:architecture/validation/protocols/filed_validation.dart';
 import 'package:architecture/main/composites/composites.dart';
 

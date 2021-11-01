@@ -8,8 +8,8 @@ import 'package:architecture/domain/usecases/usercases.dart';
 
 import 'package:architecture/ui/helpers/errors/errors.dart';
 
-import 'package:architecture/presentetion/protocols/protocols.dart';
-import 'package:architecture/presentetion/presenters/presenter.dart';
+import 'package:architecture/presentation/protocols/protocols.dart';
+import 'package:architecture/presentation/presenters/presenter.dart';
 
 class AddAccountSpy extends Mock implements AddAccount {}
 

@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import 'package:architecture/domain/entities/entities.dart';
 import 'package:architecture/domain/usecases/load_current_account.dart';
 
-import 'package:architecture/presentetion/presenters/presenter.dart';
+import 'package:architecture/presentation/presenters/presenter.dart';
 
 class LoadCurrentAccountSpy extends Mock implements LoadCurrentAccount {}
 

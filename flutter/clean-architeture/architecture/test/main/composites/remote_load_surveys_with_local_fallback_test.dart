@@ -4,7 +4,6 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'package:architecture/data/usecases/load_surveys/load_surveys.dart';
-import 'package:architecture/data/http/http_client.dart';
 import 'package:architecture/domain/entities/entities.dart';
 import 'package:architecture/domain/usecases/usercases.dart';
 

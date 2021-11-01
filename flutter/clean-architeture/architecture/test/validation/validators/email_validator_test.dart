@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:architecture/presentetion/protocols/protocols.dart';
+import 'package:architecture/presentation/protocols/protocols.dart';
 import 'package:architecture/validation/validators/validators.dart';
 
 void main() {
