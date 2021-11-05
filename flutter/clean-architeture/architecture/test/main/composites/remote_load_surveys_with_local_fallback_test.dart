@@ -32,7 +32,7 @@ class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
 
       await local.validate();
 
-      await local.load();
+      return await local.load();
     }
   }
 }
@@ -45,7 +45,8 @@ void main() {
   RemoteLoadSurveysWithLocalFallback sut;
   RemoteLoadSurveysSpy remote;
   LocalLoadSurveysSpy local;
-  List<SurveyEntity> surveys;
+  List<SurveyEntity> remoteSurveys;
+  List<SurveyEntity> localSurveys;
 
   List<SurveyEntity> mockSurveys() => [
     SurveyEntity(
@@ -59,11 +60,19 @@ void main() {
   PostExpectation mockRemoteLoadCall() => when(remote.load());
   
   void mockRemoteLoad() {
-    surveys = mockSurveys();
-    mockRemoteLoadCall().thenAnswer((_) async => surveys);
+    remoteSurveys = mockSurveys();
+    mockRemoteLoadCall().thenAnswer((_) async => remoteSurveys);
   }
 
   void mockRemoteLoadError(DomainError error) => mockRemoteLoadCall().thenThrow(error);
+
+  PostExpectation mockLocalLoadCall() => when(local.load());
+
+  void mockLocalLoad() {
+    localSurveys = mockSurveys();
+    mockLocalLoadCall().thenAnswer((_) async => localSurveys);
+  }
+
 
   setUp(() {
     remote = RemoteLoadSurveysSpy();
@@ -74,6 +83,8 @@ void main() {
     );
 
     mockRemoteLoad();
+
+    mockLocalLoad();
   });
 
   test('Should call remote load', () async {
@@ -85,13 +96,13 @@ void main() {
   test('Should call local save with remote data', () async {
     await sut.load();
 
-    verify(local.save(surveys)).called(1);
+    verify(local.save(remoteSurveys)).called(1);
   });
 
   test('Should return remote data', () async {
     final response = await sut.load();
 
-    expect(response, surveys);
+    expect(response, remoteSurveys);
   });
 
   test('Should rethrow if remote load throwa AcessDeniedError', () async {
@@ -107,5 +118,13 @@ void main() {
 
     verify(local.validate()).called(1);
     verify(local.load()).called(1);
+  });
+
+  test('Should return local surveys', () async {
+    mockRemoteLoadError(DomainError.unexpected);
+
+    final surveys = await sut.load();
+
+    expect(surveys, localSurveys);
   });
 }
