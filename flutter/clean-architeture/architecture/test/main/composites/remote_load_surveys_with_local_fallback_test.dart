@@ -1,3 +1,4 @@
+import 'package:architecture/domain/helpers/domain_error.dart';
 import 'package:faker/faker.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
@@ -44,10 +45,14 @@ void main() {
     )
   ];
 
+  PostExpectation mockRemoteLoadCall() => when(remote.load());
+  
   void mockRemoteLoad() {
     surveys = mockSurveys();
-    when(remote.load()).thenAnswer((_) async => surveys);
+    mockRemoteLoadCall().thenAnswer((_) async => surveys);
   }
+
+  void mockRemoteLoadError(DomainError error) => mockRemoteLoadCall().thenThrow(error);
 
   setUp(() {
     remote = RemoteLoadSurveysSpy();
@@ -76,5 +81,11 @@ void main() {
     final response = await sut.load();
 
     expect(response, surveys);
+  });
+
+  test('Should rethrow if remote load throwa AcessDeniedError', () async {
+    mockRemoteLoadError(DomainError.accessDenied);
+
+    expect(sut.load(), throwsA(DomainError.accessDenied));
   });
 }
