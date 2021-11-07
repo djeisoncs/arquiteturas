@@ -17,6 +17,7 @@ class PtBr extends Translations {
   String get password => 'Senha';
   String get reload => 'Recarregar';
   String get surveys => 'Enquetes';
+  String get surveyResult => 'Resultado da Enquete';
   String get wait => 'Aguarde...';
 
 }

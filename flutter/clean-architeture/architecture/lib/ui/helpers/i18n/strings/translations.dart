@@ -14,6 +14,7 @@ abstract class Translations {
   String get password;
   String get reload;
   String get surveys;
+  String get surveyResult;
   String get wait;
 
   Map<String, String> toJson() => {
