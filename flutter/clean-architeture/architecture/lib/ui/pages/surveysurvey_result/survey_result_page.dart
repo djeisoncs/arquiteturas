@@ -16,8 +16,14 @@ class SurveyResultPage extends StatelessWidget {
       appBar: AppBar(title: Text(R.string.surveyResult)),
       body: Builder(
         builder: (contexto) {
+          presenter.isLoadingStream.listen((isLoading) {
+            if (isLoading == true) {
+              showLoading(context);
+            } else {
+              hideLoading(context);
+            }
+          });
           presenter.loadData();
-
           return ListView.builder(
             itemBuilder: (context, index) {
               if (index == 0) {
