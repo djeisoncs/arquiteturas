@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class DisableIcon extends StatelessWidget {
+class ActiveIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -8,7 +8,7 @@ class DisableIcon extends StatelessWidget {
       padding: EdgeInsets.only(left: 10),
       child: Icon(
         Icons.check_circle,
-        color: Theme.of(context).disabledColor,
+        color: Theme.of(context).highlightColor,
       ),
     );
   }
