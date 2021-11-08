@@ -1,9 +1,8 @@
-
-import 'package:architecture/ui/pages/pages.dart';
+import 'survey_result_viewmodel.dart';
 
 abstract class SurveyResultPresenter {
   Stream<bool> get isLoadingStream;
-  Stream<dynamic> get surveyResultStream;
+  Stream<SurveyResultViewModel> get surveyResultStream;
 
   Future<void> loadData();
 }
