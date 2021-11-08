@@ -3,7 +3,7 @@ import 'package:architecture/ui/pages/pages.dart';
 
 abstract class SurveyResultPresenter {
   Stream<bool> get isLoadingStream;
-  Stream<List<SurveyViewModel>> get surveysStream;
+  Stream<dynamic> get surveyResultStream;
 
   Future<void> loadData();
 }

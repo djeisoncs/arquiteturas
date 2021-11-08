@@ -15,16 +15,16 @@ void main() {
   SurveyResultPresenterSpy presenter;
 
   StreamController<bool> isLoadingController;
-  StreamController<List<SurveyViewModel>> surveysController;
+  StreamController<dynamic> surveyResultController;
 
   void _initStreams() {
     isLoadingController = StreamController<bool>();
-    surveysController = StreamController<List<SurveyViewModel>>();
+    surveyResultController = StreamController<dynamic>();
   }
 
   void _mockStreams() {
     when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
-    when(presenter.surveysStream).thenAnswer((_) => surveysController.stream);
+    when(presenter.surveyResultStream).thenAnswer((_) => surveyResultController.stream);
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -47,7 +47,7 @@ void main() {
 
   void _closeStreams() {
     isLoadingController.close();
-    surveysController.close();
+    surveyResultController.close();
   }
 
   tearDown(() => _closeStreams());
@@ -83,4 +83,16 @@ void main() {
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
+
+  testWidgets('Should present error if loadSurveysStream fails', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    surveyResultController.addError(UIError.unexpected.description);
+    await tester.pump();
+
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
+    expect(find.text('Recarregar'), findsOneWidget);
+  });
+
+
 }
