@@ -60,7 +60,7 @@ void main() {
     verify(presenter.loadData()).called(1);
   });
 
-  testWidgets('Shold handle loading correctly', (WidgetTester tester) async {
+  testWidgets('Should handle loading correctly', (WidgetTester tester) async {
     await loadPage(tester);
 
     isLoadingController.add(true);
@@ -81,7 +81,7 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('Shoul present error if loadSurveysStream fails', (WidgetTester tester) async {
+  testWidgets('Should present error if loadSurveysStream fails', (WidgetTester tester) async {
     await loadPage(tester);
 
     surveysController.addError(UIError.unexpected.description);
@@ -92,7 +92,7 @@ void main() {
     expect(find.text('Question 1'), findsNothing);
   });
 
-  testWidgets('Shoul present list if loadSurveysStream succeeds', (WidgetTester tester) async {
+  testWidgets('Should present list if loadSurveysStream succeeds', (WidgetTester tester) async {
     await loadPage(tester);
 
     surveysController.add(makeSurveys());
