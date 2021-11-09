@@ -15,15 +15,18 @@ void main() {
 
   StreamController<bool> isLoadingController;
   StreamController<List<SurveyViewModel>> surveysController;
+  StreamController<String> navigateToController;
 
   void _initStreams() {
     isLoadingController = StreamController<bool>();
+    navigateToController = StreamController<String>();
     surveysController = StreamController<List<SurveyViewModel>>();
   }
 
   void _mockStreams() {
     when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
     when(presenter.surveysStream).thenAnswer((_) => surveysController.stream);
+    when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -35,7 +38,8 @@ void main() {
     final surveysPage = GetMaterialApp(
       initialRoute: '/surveys',
       getPages: [
-        GetPage(name: '/surveys', page: () => SurveysPage(presenter))
+        GetPage(name: '/surveys', page: () => SurveysPage(presenter)),
+        GetPage(name: '/any_root', page: () => Scaffold(body: Text("fake page"),))
       ],
     );
 
@@ -45,6 +49,7 @@ void main() {
   void _closeStreams() {
     isLoadingController.close();
     surveysController.close();
+    navigateToController.close();
   }
 
   tearDown(() => _closeStreams());
@@ -114,5 +119,27 @@ void main() {
     await tester.tap(find.text('Recarregar'));
 
     verify(presenter.loadData()).called(2);
+  });
+
+  testWidgets('Shold call gotoSurveyuResult on survey click', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    surveysController.add(makeSurveys());
+    await tester.pump();
+
+    await tester.tap(find.text('Question 1'));
+    await tester.pump();
+
+    verify(presenter.goToSurveyResult('1')).called(1);
+  });
+
+  testWidgets('Shold change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('/any_root');
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/any_root');
+    expect(find.text('fake page'), findsOneWidget);
   });
 }

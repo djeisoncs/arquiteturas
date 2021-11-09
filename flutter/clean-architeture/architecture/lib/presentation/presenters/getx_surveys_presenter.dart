@@ -14,9 +14,13 @@ class GetxSurveysPresenter implements SurveysPresenter {
 
   final _isLoading = true.obs;
   final _surveys = Rx<List<SurveyViewModel>>();
+  var _navigateTo = RxString();
 
   @override
   Stream<bool> get isLoadingStream => _isLoading.stream;
+
+  @override
+  Stream<String> get navigateToStream => _navigateTo.stream;
 
   @override
   Stream<List<SurveyViewModel>> get surveysStream => _surveys.stream;
@@ -28,17 +32,21 @@ class GetxSurveysPresenter implements SurveysPresenter {
 
       final surveys = await loadSurveys.load();
 
-      _surveys.value = surveys
-          .map((survey) => SurveyViewModel(
+      _surveys.value = surveys.map((survey) => SurveyViewModel(
           id: survey.id,
           question: survey.question,
           date: DateFormat('dd MMM yyyy').format(survey.dateTime),
-          didAnswer: survey.didAnswer))
-          .toList();
+          didAnswer: survey.didAnswer)
+      ).toList();
     } on DomainError {
       _surveys.subject.addError(UIError.unexpected.description);
     } finally {
       _isLoading.value = false;
     }
+  }
+
+  @override
+  void goToSurveyResult(String surveyId) {
+    _navigateTo.value = '/survey_result/$surveyId';
   }
 }
