@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
 import '../../domain/helpers/helpers.dart';
@@ -17,10 +16,14 @@ class GetxSurveyResultPresenter implements SurveyResultPresenter {
   });
 
   final _isLoading = true.obs;
+  final _isSessionExpired = RxBool();
   final _surveyResult = Rx<SurveyResultViewModel>();
 
   @override
   Stream<bool> get isLoadingStream => _isLoading.stream;
+
+  @override
+  Stream<bool> get isSessionExpiredStream => _isSessionExpired.stream;
 
   @override
   Stream<SurveyResultViewModel> get surveyResultStream => _surveyResult.stream;

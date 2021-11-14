@@ -13,11 +13,15 @@ class GetxSurveysPresenter implements SurveysPresenter {
   GetxSurveysPresenter({@required this.loadSurveys});
 
   final _isLoading = true.obs;
+  final _isSessionExpired = RxBool();
   final _surveys = Rx<List<SurveyViewModel>>();
   var _navigateTo = RxString();
 
   @override
   Stream<bool> get isLoadingStream => _isLoading.stream;
+
+  @override
+  Stream<bool> get isSessionExpiredStream => _isSessionExpired.stream;
 
   @override
   Stream<String> get navigateToStream => _navigateTo.stream;
