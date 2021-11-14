@@ -8,9 +8,9 @@ import '../../domain/usecases/usercases.dart';
 import '../../domain/helpers/domain_error.dart';
 
 import '../protocols/protocols.dart';
-import '../mixins/loading_manager.dart';
+import '../mixins/mixins.dart';
 
-class GetxLoginPresenter extends GetxController with LoadingManager implements LoginPresenter {
+class GetxLoginPresenter extends GetxController with LoadingManager, NavigationManager implements LoginPresenter {
   final Validation validation;
   final Authentication authentication;
   final SaveCurrentAccount saveCurrentAccount;
@@ -20,13 +20,11 @@ class GetxLoginPresenter extends GetxController with LoadingManager implements L
   var _emailError = Rx<UIError>();
   var _passwordError = Rx<UIError>();
   var _mainError = Rx<UIError>();
-  var _navigateTo = RxString();
   var _isFormValid = false.obs;
 
   Stream<UIError> get emailErrorStream => _emailError.stream;
   Stream<UIError> get passwordErrorStream => _passwordError.stream;
   Stream<UIError> get mainErrorStream => _mainError.stream;
-  Stream<String> get navigateToStream => _navigateTo.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
   GetxLoginPresenter({
@@ -78,7 +76,7 @@ class GetxLoginPresenter extends GetxController with LoadingManager implements L
 
       final account = await authentication.auth(AuthenticationParams(email: _email, password: _password));
       await saveCurrentAccount.save(account);
-      _navigateTo.value = '/surveys';
+      navigateTo = '/surveys';
     } on DomainError catch (error) {
       switch(error) {
         case DomainError.invalidCredentials: _mainError.value = UIError.invalidCredentials; break;
@@ -91,6 +89,6 @@ class GetxLoginPresenter extends GetxController with LoadingManager implements L
 
   @override
   void goToSignUp() {
-    _navigateTo.value = '/signup';
+    navigateTo = '/signup';
   }
 }

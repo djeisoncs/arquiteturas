@@ -8,9 +8,9 @@ import '../../domain/usecases/usercases.dart';
 import '../../domain/helpers/domain_error.dart';
 
 import '../protocols/protocols.dart';
-import '../mixins/loading_manager.dart';
+import '../mixins/mixins.dart';
 
-class GetxSignUpPresenter extends GetxController with LoadingManager implements SignupPresenter  {
+class GetxSignUpPresenter extends GetxController with LoadingManager, NavigationManager implements SignupPresenter  {
 
   final Validation validation;
   final AddAccount addAccount;
@@ -26,7 +26,6 @@ class GetxSignUpPresenter extends GetxController with LoadingManager implements 
   var _passwordError = Rx<UIError>();
   var _passwordConfirmationError = Rx<UIError>();
   var _mainError = Rx<UIError>();
-  var _navigateTo = RxString();
   var _isFormValid = false.obs;
 
   Stream<UIError> get emailErrorStream => _emailError.stream;
@@ -34,7 +33,6 @@ class GetxSignUpPresenter extends GetxController with LoadingManager implements 
   Stream<UIError> get passwordErrorStream => _passwordError.stream;
   Stream<UIError> get passwordConfirmationErrorStream => _passwordConfirmationError.stream;
   Stream<UIError> get mainErrorStream => _mainError.stream;
-  Stream<String> get navigateToStream => _navigateTo.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
   GetxSignUpPresenter({
@@ -104,7 +102,7 @@ class GetxSignUpPresenter extends GetxController with LoadingManager implements 
 
       final account = await addAccount.add(AddAccountParams(name: _name, email: _email, password: _password, passwordConfirmation: _passwordConfirmation));
       await saveCurrentAccount.save(account);
-      _navigateTo.value = '/surveys';
+      navigateTo = '/surveys';
     } on DomainError catch (error) {
       switch(error) {
         case DomainError.emailInUse: _mainError.value = UIError.emailInUse; break;
@@ -117,6 +115,6 @@ class GetxSignUpPresenter extends GetxController with LoadingManager implements 
 
   @override
   void goToLogin() {
-    _navigateTo.value = '/login';
+    navigateTo = '/login';
   }
 }
