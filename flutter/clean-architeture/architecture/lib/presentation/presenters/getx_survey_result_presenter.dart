@@ -6,7 +6,9 @@ import '../../domain/usecases/usercases.dart';
 import '../../ui/helpers/helpers.dart';
 import '../../ui/pages/pages.dart';
 
-class GetxSurveyResultPresenter implements SurveyResultPresenter {
+import '../mixins/loading_manager.dart';
+
+class GetxSurveyResultPresenter with LoadingManager implements  SurveyResultPresenter {
   final LoadSurveyResult loadSurveyResult;
   final String surveyId;
 
@@ -15,12 +17,8 @@ class GetxSurveyResultPresenter implements SurveyResultPresenter {
     @required this.surveyId,
   });
 
-  final _isLoading = true.obs;
   final _isSessionExpired = RxBool();
   final _surveyResult = Rx<SurveyResultViewModel>();
-
-  @override
-  Stream<bool> get isLoadingStream => _isLoading.stream;
 
   @override
   Stream<bool> get isSessionExpiredStream => _isSessionExpired.stream;
@@ -31,7 +29,7 @@ class GetxSurveyResultPresenter implements SurveyResultPresenter {
   @override
   Future<void> loadData() async {
     try {
-      _isLoading.value = true;
+      isLoading = true;
 
       final surveyResult = await loadSurveyResult.loadBySurvey(surveyId: surveyId);
 
@@ -51,7 +49,7 @@ class GetxSurveyResultPresenter implements SurveyResultPresenter {
         _surveyResult.subject.addError(UIError.unexpected.description);
       }
     } finally {
-      _isLoading.value = false;
+      isLoading = false;
     }
   }
 }
