@@ -39,6 +39,7 @@ void main() {
   }
 
   void mockLoadSurveysError() => mockLoadSurveysCall().thenThrow(DomainError.unexpected);
+  void mockAccessDeniedError() => mockLoadSurveysCall().thenThrow(DomainError.accessDenied);
 
   setUp(() {
     loadSurveys = LoadSurveysSpy();
@@ -71,9 +72,19 @@ void main() {
 
   test('Should emit correct events on fails', () async {
     mockLoadSurveysError();
+
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
 
     sut.surveysStream.listen(null, onError: expectAsync1((error) => expect(error, UIError.unexpected.description)));
+
+    await sut.loadData();
+  });
+
+  test('Should emit correct events on access denied', () async {
+    mockAccessDeniedError();
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(sut.isSessionExpiredStream, emits(true));
 
     await sut.loadData();
   });
