@@ -1,10 +1,11 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
+import '../../mixins/mixins.dart';
 
 import 'splash_presenter.dart';
 
-class SplashPage extends StatelessWidget {
+class SplashPage extends StatelessWidget with NavigationManager {
   final SplashPresenter presenter;
 
   SplashPage({@required this.presenter});
@@ -17,11 +18,9 @@ class SplashPage extends StatelessWidget {
       appBar: AppBar(title: Text('4Dev'),),
       body: Builder(
         builder: (context) {
-          presenter.navigateToStream.listen((page) {
-            if (page?.isNotEmpty == true) {
-              Get.offAllNamed(page);
-            }
-          });
+
+          handleNavigation(presenter.navigateToStream, clear: true);
+
           return Center(
             child: CircularProgressIndicator(),
           );
