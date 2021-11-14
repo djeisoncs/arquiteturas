@@ -7,19 +7,15 @@ import '../../domain/usecases/usercases.dart';
 import '../../ui/helpers/helpers.dart';
 import '../../ui/pages/pages.dart';
 
-import '../mixins/loading_manager.dart';
+import '../mixins/mixins.dart';
 
-class GetxSurveysPresenter with LoadingManager implements SurveysPresenter {
+class GetxSurveysPresenter with LoadingManager, SessionManager implements SurveysPresenter {
   final LoadSurveys loadSurveys;
 
   GetxSurveysPresenter({@required this.loadSurveys});
 
-  final _isSessionExpired = RxBool();
   final _surveys = Rx<List<SurveyViewModel>>();
   var _navigateTo = RxString();
-
-  @override
-  Stream<bool> get isSessionExpiredStream => _isSessionExpired.stream;
 
   @override
   Stream<String> get navigateToStream => _navigateTo.stream;
@@ -42,7 +38,7 @@ class GetxSurveysPresenter with LoadingManager implements SurveysPresenter {
       ).toList();
     } on DomainError catch(error) {
       if (error == DomainError.accessDenied) {
-        _isSessionExpired.value = true;
+        isSessionExpired = true;
       } else {
         _surveys.subject.addError(UIError.unexpected.description);
       }
