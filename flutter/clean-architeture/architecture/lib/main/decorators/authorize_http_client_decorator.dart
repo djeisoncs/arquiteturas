@@ -17,7 +17,7 @@ class AuthorizeHttpClientDecorator implements HttpClient {
   @override
   Future<dynamic> request({@required String url, @required String method, Map body, Map headers}) async {
     try {
-      final token = await featchSecureCacheStorage.fetchSecure('token');
+      final token = await featchSecureCacheStorage.fetch('token');
 
       final athorizedHeaders = headers ?? {}..addAll({'x-access-token': token});
 
@@ -27,7 +27,7 @@ class AuthorizeHttpClientDecorator implements HttpClient {
         rethrow;
       }
 
-      await deleteSecureCacheStorage.deleteSecure('token');
+      await deleteSecureCacheStorage.delete('token');
       throw HttpError.forbidden;
     }
   }

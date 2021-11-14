@@ -14,7 +14,7 @@ void main() {
   LocalLoadCurrentAccount sut;
   String token;
 
-  PostExpectation mockFetchSecureCall() => when(featchSecureCacheStore.fetchSecure(any));
+  PostExpectation mockFetchSecureCall() => when(featchSecureCacheStore.fetch(any));
 
   void mockFetchSecure() => mockFetchSecureCall().thenAnswer((_) async => token);
 
@@ -30,7 +30,7 @@ void main() {
   test('Should call FetchSecureCacheStorage with correct value', () async {
     await sut.load();
 
-    verify(featchSecureCacheStore.fetchSecure('token'));
+    verify(featchSecureCacheStore.fetch('token'));
   });
 
   test('Should return an AccountEntity', () async {

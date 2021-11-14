@@ -14,7 +14,7 @@ class LocalLoadCurrentAccount implements LoadCurrentAccount {
   @override
   Future<AccountEntity> load() async {
     try {
-      final token = await featchSecureCacheStore.fetchSecure('token');
+      final token = await featchSecureCacheStore.fetch('token');
       return AccountEntity(token);
     } catch (error) {
       throw DomainError.unexpected;
