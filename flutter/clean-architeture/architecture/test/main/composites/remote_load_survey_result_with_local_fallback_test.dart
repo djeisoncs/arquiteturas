@@ -20,6 +20,8 @@ class RemoteLoadSurveyResultWithLocalFallBack implements LoadSurveyResult {
   Future<SurveyResultEntity> loadBySurvey({String surveyId}) async {
     final surveyResult = await remote.loadBySurvey(surveyId: surveyId);
     local.save(surveyId: surveyId, surveyResult: surveyResult);
+
+    return surveyResult;
   }
 
 }
@@ -72,5 +74,11 @@ void main() {
     await sut.loadBySurvey(surveyId: surveyId);
 
     verify(local.save(surveyId: surveyId, surveyResult: surveyResult)).called(1);
+  });
+
+  test('Should call return remote data', () async {
+    final response = await sut.loadBySurvey(surveyId: surveyId);
+
+    expect(response, surveyResult);
   });
 }
