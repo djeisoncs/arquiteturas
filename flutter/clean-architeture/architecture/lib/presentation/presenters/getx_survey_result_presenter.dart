@@ -49,4 +49,9 @@ class GetxSurveyResultPresenter extends GetxController with LoadingManager, Sess
       isLoading = false;
     }
   }
+
+  @override
+  Future<void> save({@required String answer}) {
+
+  }
 }

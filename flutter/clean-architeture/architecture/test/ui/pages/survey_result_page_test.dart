@@ -124,7 +124,6 @@ void main() {
     verify(presenter.loadData()).called(2);
   });
 
-
   testWidgets('Should present valid data if surveyResultStream succeeds', (WidgetTester tester) async {
     await loadPage(tester);
 
@@ -147,7 +146,6 @@ void main() {
     expect(image.url, 'Image 0');
   });
 
-
   testWidgets('Should logout', (WidgetTester tester) async {
     await loadPage(tester);
 
@@ -168,5 +166,19 @@ void main() {
     isSessionExpiredController.add(null);
     await tester.pumpAndSettle();
     expect(Get.currentRoute, '/survey_result/any_survey_id');
+  });
+
+  testWidgets('Should call save on list item click', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    surveyResultController.add(makeSurveyResult());
+
+    await provideMockedNetworkImages(() async {
+      await tester.pump();
+    });
+
+    await tester.tap(find.text('Answer 0'));
+
+    verify(presenter.save(answer: 'Answer 0')).called(1);
   });
 }
