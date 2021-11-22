@@ -61,12 +61,6 @@ void main() {
     verify(httpClient.request(url: url, method: 'get'));
   });
 
-  test("Should return suervey on 200", () async {
-    await sut.loadBySurvey();
-
-    verify(httpClient.request(url: url, method: 'get'));
-  });
-
   test("Should return suervey data on 200", () async {
     final result = await sut.loadBySurvey();
 
