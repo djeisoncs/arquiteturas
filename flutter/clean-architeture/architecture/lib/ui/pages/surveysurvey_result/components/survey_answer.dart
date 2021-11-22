@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../survey_answer_viewmodel.dart';
 import 'active_icon.dart';
-import 'disable_icon.dart';
+import 'disabled_icon.dart';
 
 class SurveyAnswer extends StatelessWidget {
   final SurveyAnswerViewModel viewModel;
@@ -26,11 +26,13 @@ class SurveyAnswer extends StatelessWidget {
               color: Theme.of(context).primaryColorDark,
           ),
         ),
-        viewModel.isCurrentAnswer ? ActiveIcon() : DisableIcon(),
+        viewModel.isCurrentAnswer ? ActiveIcon() : DisabledIcon()
       ];
-
       if (viewModel.image != null) {
-        children.insert(0, Image.network(viewModel.image, width: 40));
+        children.insert(0, Image.network(
+          viewModel.image,
+          width: 40,
+        ));
       }
       return children;
     }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class DisableIcon extends StatelessWidget {
+class DisabledIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {

@@ -33,7 +33,8 @@ class GetxSurveyResultPresenter extends GetxController with LoadingManager, Sess
           surveyId: surveyResult.surveyId,
           question: surveyResult.question,
           answers: surveyResult.answers.map((answer) => SurveyAnswerViewModel(
-              answer: answer.image,
+              image: answer.image,
+              answer: answer.answer,
               isCurrentAnswer: answer.isCurrentAnswer,
               percent: '${answer.percent}%'
           )).toList()
