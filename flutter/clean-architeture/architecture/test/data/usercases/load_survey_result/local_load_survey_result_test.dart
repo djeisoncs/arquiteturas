@@ -222,7 +222,6 @@ void main() {
     LocalLoadSurveyResult sut;
     FetchCacheStorageSpy cacheStorage;
     SurveyResultEntity surveyResult;
-    String surveyId;
 
 
     SurveyResultEntity mockSurveyResult() => SurveyResultEntity(
@@ -249,7 +248,6 @@ void main() {
     void mockSaveError() => mockCallsSave().thenThrow(Exception());
 
     setUp(() {
-      surveyId = faker.guid.guid();
       cacheStorage = FetchCacheStorageSpy();
       sut = LocalLoadSurveyResult(
           cacheStorage: cacheStorage
@@ -278,15 +276,15 @@ void main() {
         ]
       };
 
-      await sut.save(surveyId: surveyId, surveyResult: surveyResult);
+      await sut.save(surveyResult);
 
-      verify(cacheStorage.save(key: 'survey_result/$surveyId', value: json)).called(1);
+      verify(cacheStorage.save(key: 'survey_result/${surveyResult.surveyId}', value: json)).called(1);
     });
 
     test('Should throw UnexpectedError if save throws', () async {
       mockSaveError();
 
-      expect(sut.save(surveyId: surveyId, surveyResult: surveyResult), throwsA(DomainError.unexpected));
+      expect(sut.save(surveyResult), throwsA(DomainError.unexpected));
     });
   });
 }
