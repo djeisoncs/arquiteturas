@@ -16,6 +16,15 @@ void main() {
   String url;
   String answer;
 
+
+  PostExpectation mockRequest() => when(httpClient.request(
+      url: anyNamed('url'),
+      method: anyNamed('method'),
+      body: anyNamed('body')
+  ));
+
+  void mockHttpError(HttpError error) => mockRequest().thenThrow(error);
+  
   setUp(() {
     url = faker.internet.httpsUrl();
     answer = faker.lorem.sentence();
@@ -27,6 +36,24 @@ void main() {
     await sut.save(answer: answer);
 
     verify(httpClient.request(url: url, method: 'put', body: {'answer': answer}));
+  });
+
+  test("Should throw UnexpectedError if HttpClient returns 404", () async {
+    mockHttpError(HttpError.notFound);
+
+    expect(sut.save(answer: answer), throwsA(DomainError.unexpected));
+  });
+
+  test("Should throw UnexpectedError if HttpClient returns 500", () async {
+    mockHttpError(HttpError.serverError);
+
+    expect(sut.save(answer: answer), throwsA(DomainError.unexpected));
+  });
+
+  test("Should throw AcessDeniedError if HttpClient returns 403", () async {
+    mockHttpError(HttpError.forbidden);
+
+    expect(sut.save(answer: answer), throwsA(DomainError.accessDenied));
   });
 
 }

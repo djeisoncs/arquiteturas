@@ -15,15 +15,14 @@ class RemoteSaveSurveyResult /*implements SaveSurveyResult*/ {
 
   Future<void> save({@required String answer}) async {
   // Future<SurveyResultEntity> save({@required String answer}) async {
-
+    try {
       await httpClient.request(url: url, method: 'put', body: {'answer':answer});
       // final httpResponse = await httpClient.request(url: url, method: 'put', body: {});
 
-    //   return RemoteSurveyResultModel.fromJson(httpResponse).toEntity();
-    // } on HttpError catch(error) {
-    //   throw error == HttpError.forbidden
-    //       ? DomainError.accessDenied
-    //       : DomainError.unexpected;
-    // }
+    } on HttpError catch(error) {
+      throw error == HttpError.forbidden
+          ? DomainError.accessDenied
+          : DomainError.unexpected;
+    }
   }
 }
