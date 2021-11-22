@@ -12,6 +12,7 @@ import 'package:architecture/ui/pages/pages.dart';
 import 'package:architecture/presentation/presenters/presenter.dart';
 
 class LoadSurveyResltSpy extends Mock implements LoadSurveyResult {}
+
 class SaveSurveyResltSpy extends Mock implements SaveSurveyResult {}
 
 void main() {
