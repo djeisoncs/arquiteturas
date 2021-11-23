@@ -1,47 +1,24 @@
-
-import 'package:architecture/ui/pages/pages.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-class SurveyItem extends StatelessWidget {
-  final SurveyViewModel viewModel;
+import '../survey_viewmodel.dart';
+import 'survey_item.dart';
 
-  SurveyItem(this.viewModel);
+class SurveyItens extends StatelessWidget {
+  final List<SurveyViewModel> viewModels;
+
+  SurveyItens(this.viewModels);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 5),
-      child: Container(
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-            color: viewModel.didAnswer ? Theme.of(context).secondaryHeaderColor :Theme.of(context).primaryColorDark,
-            boxShadow: [
-              BoxShadow(
-                  offset: Offset(0, 1),
-                  spreadRadius: 0,
-                  blurRadius: 2,
-                  color: Colors.black),
-            ],
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10))),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              viewModel.date,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              viewModel.question,
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-          ],
+      padding: EdgeInsets.symmetric(vertical: 20),
+      child: CarouselSlider(
+        options: CarouselOptions(
+            enlargeCenterPage: true,
+            aspectRatio: 1
         ),
+        items: viewModels.map((viewModel) => SurveyItem(viewModel)).toList(),
       ),
     );
   }
