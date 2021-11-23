@@ -90,8 +90,12 @@ void main() {
   });
 
   test('Should go to SurveyResultPage on survey click', () {
-    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/survey_result/any_parameter')));
+    expectLater(sut.navigateToStream, emitsInOrder([
+      '/survey_result/any_parameter',
+      '/survey_result/any_parameter'
+    ]));
 
+    sut.goToSurveyResult('any_parameter');
     sut.goToSurveyResult('any_parameter');
   });
 }
