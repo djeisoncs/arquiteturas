@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:architecture/ui/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 
 import 'package:architecture/ui/pages/pages.dart';
+
+import '../helpers/helpers.dart';
 
 class SurveysPresenterSpy extends Mock implements SurveysPresenter {}
 
@@ -38,16 +39,7 @@ void main() {
     _initStreams();
     _mockStreams();
 
-    final surveysPage = GetMaterialApp(
-      initialRoute: '/surveys',
-      getPages: [
-        GetPage(name: '/surveys', page: () => SurveysPage(presenter)),
-        GetPage(name: '/any_root', page: () => Scaffold(body: Text("fake page"),)),
-        GetPage(name: '/login', page: () => Scaffold(body: Text("fake login"),))
-      ],
-    );
-
-    await tester.pumpWidget(surveysPage);
+    await tester.pumpWidget(makePage(path: '/surveys', page: () => SurveysPage(presenter)));
   }
 
   void _closeStreams() {
@@ -141,10 +133,10 @@ void main() {
   testWidgets('Shold change page', (WidgetTester tester) async {
     await loadPage(tester);
 
-    navigateToController.add('/any_root');
+    navigateToController.add('/any_route');
     await tester.pumpAndSettle();
 
-    expect(Get.currentRoute, '/any_root');
+    expect(currentRoute, '/any_route');
     expect(find.text('fake page'), findsOneWidget);
   });
 
@@ -153,11 +145,11 @@ void main() {
 
     navigateToController.add('');
     await tester.pump();
-    expect(Get.currentRoute, '/surveys');
+    expect(currentRoute, '/surveys');
 
     navigateToController.add(null);
     await tester.pump();
-    expect(Get.currentRoute, '/surveys');
+    expect(currentRoute, '/surveys');
   });
 
   testWidgets('Should logout', (WidgetTester tester) async {
@@ -166,7 +158,7 @@ void main() {
     isSessionExpiredController.add(true);
     await tester.pumpAndSettle();
 
-    expect(Get.currentRoute, '/login');
+    expect(currentRoute, '/login');
     expect(find.text('fake login'), findsOneWidget);
   });
 
@@ -175,10 +167,10 @@ void main() {
 
     isSessionExpiredController.add(false);
     await tester.pumpAndSettle();
-    expect(Get.currentRoute, '/surveys');
+    expect(currentRoute, '/surveys');
 
     isSessionExpiredController.add(null);
     await tester.pumpAndSettle();
-    expect(Get.currentRoute, '/surveys');
+    expect(currentRoute, '/surveys');
   });
 }
