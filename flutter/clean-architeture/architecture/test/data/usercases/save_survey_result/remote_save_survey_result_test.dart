@@ -8,6 +8,8 @@ import 'package:architecture/domain/entities/entities.dart';
 import 'package:architecture/data/usecases/usecases.dart';
 import 'package:architecture/data/http/http.dart';
 
+import '../../../mocks/mocks.dart';
+
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
@@ -16,28 +18,6 @@ void main() {
   String url;
   String answer;
   Map surveyResult;
-
-  Map mockValidData() =>
-      {
-        'surveyId': faker.guid.guid(),
-        'question': faker.randomGenerator.string(50),
-        'answers': [
-          {
-            'image': faker.internet.httpsUrl(),
-            'answer': faker.randomGenerator.string(20),
-            'isCurrentAccountAnswer': faker.randomGenerator.boolean(),
-            'percent': faker.randomGenerator.integer(100),
-            'count': faker.randomGenerator.integer(1000),
-          },
-          {
-            'answer': faker.randomGenerator.string(20),
-            'isCurrentAccountAnswer': faker.randomGenerator.boolean(),
-            'percent': faker.randomGenerator.integer(100),
-            'count': faker.randomGenerator.integer(1000),
-          }
-        ],
-        'date': faker.date.dateTime().toIso8601String()
-      };
 
   PostExpectation mockRequest() => when(httpClient.request(
       url: anyNamed('url'),
@@ -58,7 +38,7 @@ void main() {
     httpClient = HttpClientSpy();
     sut = RemoteSaveSurveyResult(url: url, httpClient: httpClient);
 
-    mockHttpData(mockValidData());
+    mockHttpData(FakeSurveyResultFactory.makeApiJson());
   });
 
   test("Should call HttpClient with correct values", () async {
