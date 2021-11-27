@@ -1,4 +1,3 @@
-import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -6,6 +5,8 @@ import 'package:architecture/domain/entities/entities.dart';
 import 'package:architecture/domain/helpers/helpers.dart';
 import 'package:architecture/data/cache/cache.dart';
 import 'package:architecture/data/usecases/usecases.dart';
+
+import '../../../mocks/mocks.dart';
 
 class FetchCacheStorageSpy extends Mock implements CacheStorage {}
 
@@ -16,20 +17,6 @@ void main() {
     FetchCacheStorageSpy fetchCacheStorage;
     List<Map> data;
 
-    List<Map> mockValidData() => [
-      {
-        'id': faker.guid.guid(),
-        'question': faker.randomGenerator.string(50),
-        'didAnswer': 'false',
-        'date': '2020-07-20T00:00:00Z'
-      },
-      {
-        'id': faker.guid.guid(),
-        'question': faker.randomGenerator.string(50),
-        'didAnswer': 'true',
-        'date': '2018-02-02T00:00:00Z'
-      }
-    ];
 
     PostExpectation mockCallsFetch () => when(fetchCacheStorage.fetch(any));
 
@@ -46,7 +33,7 @@ void main() {
           cacheStorage: fetchCacheStorage
       );
 
-      mockFetch(mockValidData());
+      mockFetch(FakeSurveysFactory.makeCacheJson());
     });
 
     test('Should call cacheStorage with correct key', () async {
@@ -77,25 +64,13 @@ void main() {
     });
 
     test('Should throw UnexpectedError if cache is invalid', () async {
-      mockFetch([
-        {
-          'id': faker.guid.guid(),
-          'question': faker.randomGenerator.string(50),
-          'didAnswer': 'false',
-          'date': 'invalid date'
-        }
-      ]);
+      mockFetch(FakeSurveysFactory.makeInvalidCacheJson());
 
       expect(sut.load(), throwsA(DomainError.unexpected));
     });
 
     test('Should throw UnexpectedError if cache is incomplete', () async {
-      mockFetch([
-        {
-          'didAnswer': 'false',
-          'date': '2020-07-20T00:00:00Z'
-        }
-      ]);
+      mockFetch(FakeSurveysFactory.makeIncompleteCacheJson());
 
       expect(sut.load(), throwsA(DomainError.unexpected));
     });
@@ -112,21 +87,6 @@ void main() {
     FetchCacheStorageSpy fetchCacheStorage;
     List<Map> data;
 
-    List<Map> mockValidData() => [
-      {
-        'id': faker.guid.guid(),
-        'question': faker.randomGenerator.string(50),
-        'didAnswer': 'false',
-        'date': '2020-07-20T00:00:00Z'
-      },
-      {
-        'id': faker.guid.guid(),
-        'question': faker.randomGenerator.string(50),
-        'didAnswer': 'true',
-        'date': '2018-02-02T00:00:00Z'
-      }
-    ];
-
     PostExpectation mockCallsFetch () => when(fetchCacheStorage.fetch(any));
 
     void mockFetch(List<Map> list) {
@@ -142,7 +102,7 @@ void main() {
           cacheStorage: fetchCacheStorage
       );
 
-      mockFetch(mockValidData());
+      mockFetch(FakeSurveysFactory.makeCacheJson());
     });
 
     test('Should call cacheStorage with correct key', () async {
@@ -152,14 +112,7 @@ void main() {
     });
 
     test('Should delete cache if it is invalid', () async {
-      mockFetch([
-        {
-          'id': faker.guid.guid(),
-          'question': faker.randomGenerator.string(50),
-          'didAnswer': 'false',
-          'date': 'invalid date'
-        }
-      ]);
+      mockFetch(FakeSurveysFactory.makeInvalidCacheJson());
 
       await sut.validate();
 
@@ -167,12 +120,7 @@ void main() {
     });
 
     test('Should delete cache if it is incomplete', () async {
-      mockFetch([
-        {
-          'didAnswer': 'false',
-          'date': '2018-02-02T00:00:00Z'
-        }
-      ]);
+      mockFetch(FakeSurveysFactory.makeIncompleteCacheJson());
 
       await sut.validate();
 
@@ -193,12 +141,6 @@ void main() {
     FetchCacheStorageSpy cacheStorage;
     List<SurveyEntity> surveys;
 
-
-    List<SurveyEntity> mockSurveys() => [
-      SurveyEntity(id: faker.guid.guid(), question: faker.randomGenerator.string(50), dateTime: DateTime.utc(2020, 2, 2), didAnswer: true),
-      SurveyEntity(id: faker.guid.guid(), question: faker.randomGenerator.string(50), dateTime: DateTime.utc(2018, 12, 20), didAnswer: false)
-    ];
-
     PostExpectation mockCallsSave () => when(cacheStorage.save(key: anyNamed('key'), value: anyNamed('value')));
 
 
@@ -210,7 +152,7 @@ void main() {
           cacheStorage: cacheStorage
       );
 
-      surveys = mockSurveys();
+      surveys = FakeSurveysFactory.makeEntities();
     });
 
     test('Should call cacheStorage with correct values', () async {

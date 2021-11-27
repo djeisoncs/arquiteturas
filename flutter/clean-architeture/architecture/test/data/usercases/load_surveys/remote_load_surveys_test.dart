@@ -8,6 +8,7 @@ import 'package:architecture/domain/entities/entities.dart';
 import 'package:architecture/data/usecases/usecases.dart';
 import 'package:architecture/data/http/http.dart';
 
+import '../../../mocks/mocks.dart';
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
@@ -15,21 +16,6 @@ void main() {
   HttpClientSpy httpClient;
   String url;
   List<Map> list;
-
-  List<Map> mockValidData() => [
-        {
-          'id': faker.guid.guid(),
-          'question': faker.randomGenerator.string(50),
-          'didAnswer': faker.randomGenerator.boolean(),
-          'date': faker.date.dateTime().toIso8601String()
-        },
-        {
-          'id': faker.guid.guid(),
-          'question': faker.randomGenerator.string(50),
-          'didAnswer': faker.randomGenerator.boolean(),
-          'date': faker.date.dateTime().toIso8601String()
-        }
-      ];
 
   PostExpectation mockRequest() => when(
       httpClient.request(url: anyNamed('url'), method: anyNamed('method')));
@@ -46,7 +32,7 @@ void main() {
     httpClient = HttpClientSpy();
     sut = RemoteLoadSurveys(url: url, httpClient: httpClient);
 
-    mockHttpData(mockValidData());
+    mockHttpData(FakeSurveysFactory.makeApiJson());
   });
 
   test("Should call HttpClient with correct values", () async {

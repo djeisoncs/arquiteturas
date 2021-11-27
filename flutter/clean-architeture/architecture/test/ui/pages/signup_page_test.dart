@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 
 import 'package:architecture/ui/helpers/errors/errors.dart';
 import 'package:architecture/ui/pages/pages.dart';
+
+import '../helpers/helpers.dart';
 
 class SignupPresenterMock extends Mock implements SignupPresenter {}
 
@@ -57,18 +58,8 @@ void main() {
     presenter = SignupPresenterMock();
     _initStreams();
     _initMocksStreams();
-    final signUpPage = GetMaterialApp(
-      initialRoute: '/signup',
-      getPages: [
-        GetPage(name: '/signup', page: () => SignUpPage(presenter)),
-        GetPage(
-            name: '/any_root',
-            page: () => Scaffold(
-                  body: Text("fake page"),
-                ))
-      ],
-    );
-    await tester.pumpWidget(signUpPage);
+
+    await tester.pumpWidget(makePage(path: '/signup', page: () => SignUpPage(presenter)));
   }
 
   void _closeStreams() {
@@ -261,10 +252,10 @@ void main() {
   testWidgets('Shold change page', (WidgetTester tester) async {
     await loadPage(tester);
 
-    navigateToController.add('/any_root');
+    navigateToController.add('/any_route');
     await tester.pumpAndSettle();
 
-    expect(Get.currentRoute, '/any_root');
+    expect(currentRoute, '/any_route');
     expect(find.text('fake page'), findsOneWidget);
   });
 
@@ -273,11 +264,11 @@ void main() {
 
     navigateToController.add('');
     await tester.pump();
-    expect(Get.currentRoute, '/signup');
+    expect(currentRoute, '/signup');
 
     navigateToController.add(null);
     await tester.pump();
-    expect(Get.currentRoute, '/signup');
+    expect(currentRoute, '/signup');
   });
 
   testWidgets('Shold call gotoLogin on link click', (WidgetTester tester) async {
