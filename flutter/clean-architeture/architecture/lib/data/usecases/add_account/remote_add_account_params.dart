@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+
 
 import '../../../domain/usecases/usercases.dart';
 
@@ -9,10 +9,10 @@ class RemoteAddAccountParams {
   String passwordConfirmation;
 
   RemoteAddAccountParams({
-    @required this.name,
-    @required this.email,
-    @required this.password,
-    @required this.passwordConfirmation
+    required this.name,
+    required this.email,
+    required this.password,
+    required this.passwordConfirmation
   });
 
   factory RemoteAddAccountParams.fromDomain(AddAccountParams params) =>

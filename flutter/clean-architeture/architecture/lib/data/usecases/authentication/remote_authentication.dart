@@ -1,5 +1,5 @@
 
-import 'package:meta/meta.dart';
+
 
 import '../../../domain/usecases/authentication.dart';
 import '../../../domain/entities/account_entity.dart';
@@ -13,7 +13,7 @@ class RemoteAuthentication implements Authentication {
   final HttpClient httpClient;
   final String url;
 
-  RemoteAuthentication({@required this.httpClient, @required this.url});
+  RemoteAuthentication({required this.httpClient, required this.url});
 
   Future<AccountEntity> auth(AuthenticationParams params) async {
     try {

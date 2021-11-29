@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
+
 
 import '../../ui/pages/pages.dart';
 import '../../ui/helpers/errors/errors.dart';
@@ -16,25 +16,32 @@ class GetxSignUpPresenter extends GetxController with LoadingManager, Navigation
   final AddAccount addAccount;
   final SaveCurrentAccount saveCurrentAccount;
 
-  String _email;
-  String _name;
-  String _password;
-  String _passwordConfirmation;
+  String? _email;
+  String? _name;
+  String? _password;
+  String? _passwordConfirmation;
 
-  var _emailError = Rx<UIError>();
-  var _nameError = Rx<UIError>();
-  var _passwordError = Rx<UIError>();
-  var _passwordConfirmationError = Rx<UIError>();
+  final _emailError = Rx<UIError?>(null);
+  final _nameError = Rx<UIError?>(null);
+  final _passwordError = Rx<UIError?>(null);
+  final _passwordConfirmationError = Rx<UIError?>(null);
 
-  Stream<UIError> get emailErrorStream => _emailError.stream;
-  Stream<UIError> get nameErrorStream => _nameError.stream;
-  Stream<UIError> get passwordErrorStream => _passwordError.stream;
-  Stream<UIError> get passwordConfirmationErrorStream => _passwordConfirmationError.stream;
+  @override
+  Stream<UIError?> get emailErrorStream => _emailError.stream;
+
+  @override
+  Stream<UIError?> get nameErrorStream => _nameError.stream;
+
+  @override
+  Stream<UIError?> get passwordErrorStream => _passwordError.stream;
+
+  @override
+  Stream<UIError?> get passwordConfirmationErrorStream => _passwordConfirmationError.stream;
 
   GetxSignUpPresenter({
-    @required this.validation,
-    @required this.addAccount,
-    @required this.saveCurrentAccount,
+    required this.validation,
+    required this.addAccount,
+    required this.saveCurrentAccount,
   });
 
   @override
@@ -65,7 +72,7 @@ class GetxSignUpPresenter extends GetxController with LoadingManager, Navigation
     _validateForm();
   }
 
-  UIError _validadeField(String field) {
+  UIError? _validadeField(String field) {
     final formData = {
       'name': _name,
       'email': _email,
@@ -96,7 +103,13 @@ class GetxSignUpPresenter extends GetxController with LoadingManager, Navigation
       mainError = null;
       isLoading = true;
 
-      final account = await addAccount.add(AddAccountParams(name: _name, email: _email, password: _password, passwordConfirmation: _passwordConfirmation));
+      final account = await addAccount.add(AddAccountParams(
+          name: _name!,
+          email: _email!,
+          password: _password!,
+          passwordConfirmation: _passwordConfirmation!
+      ));
+
       await saveCurrentAccount.save(account);
       navigateTo = '/surveys';
     } on DomainError catch (error) {

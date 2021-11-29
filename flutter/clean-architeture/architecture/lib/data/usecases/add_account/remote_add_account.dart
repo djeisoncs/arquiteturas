@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+
 
 import '../../../domain/entities/entities.dart';
 import '../../../domain/helpers/helpers.dart';
@@ -14,7 +14,7 @@ class RemoteAddAccount implements AddAccount {
   final HttpClient httpClient;
   final String url;
 
-  RemoteAddAccount({@required this.httpClient, @required this.url});
+  RemoteAddAccount({required this.httpClient, required this.url});
 
   Future<AccountEntity> add(AddAccountParams params) async {
     final body = RemoteAddAccountParams.fromDomain(params).toJson();

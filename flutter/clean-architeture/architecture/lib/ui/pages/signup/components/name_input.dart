@@ -9,14 +9,14 @@ class NameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final presenter = Provider.of<SignupPresenter>(context);
-    return StreamBuilder<UIError>(
+    return StreamBuilder<UIError?>(
         stream: presenter.nameErrorStream,
         builder: (context, snapshot) {
           return TextField(
             decoration: InputDecoration(
               labelText: R.string.name,
               icon: Icon(Icons.person, color: Theme.of(context).primaryColorLight),
-              errorText: snapshot.hasData ? snapshot.data.description : null,
+              errorText: snapshot.data?.description,
             ),
             keyboardType: TextInputType.name,
             onChanged: presenter.validateName,

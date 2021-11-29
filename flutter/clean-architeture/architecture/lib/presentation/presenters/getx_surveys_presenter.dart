@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:meta/meta.dart';
+
 
 import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usercases.dart';
@@ -12,9 +12,9 @@ import '../mixins/mixins.dart';
 class GetxSurveysPresenter extends GetxController with LoadingManager, SessionManager, NavigationManager implements SurveysPresenter {
   final LoadSurveys loadSurveys;
 
-  GetxSurveysPresenter({@required this.loadSurveys});
+  GetxSurveysPresenter({required this.loadSurveys});
 
-  final _surveys = Rx<List<SurveyViewModel>>();
+  final _surveys = Rx<List<SurveyViewModel>>([]);
 
   @override
   Stream<List<SurveyViewModel>> get surveysStream => _surveys.stream;

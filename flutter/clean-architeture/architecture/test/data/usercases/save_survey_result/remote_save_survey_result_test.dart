@@ -1,6 +1,6 @@
 import 'package:architecture/domain/helpers/helpers.dart';
 import 'package:faker/faker.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:architecture/domain/entities/entities.dart';
@@ -8,43 +8,30 @@ import 'package:architecture/domain/entities/entities.dart';
 import 'package:architecture/data/usecases/usecases.dart';
 import 'package:architecture/data/http/http.dart';
 
-import '../../../mocks/mocks.dart';
-
-class HttpClientSpy extends Mock implements HttpClient {}
+import '../../../infra/mocks/api_factory.dart';
+import '../../mocks/mocks.dart';
 
 void main() {
-  RemoteSaveSurveyResult sut;
-  HttpClientSpy httpClient;
-  String url;
-  String answer;
-  Map surveyResult;
-
-  PostExpectation mockRequest() => when(httpClient.request(
-      url: anyNamed('url'),
-      method: anyNamed('method'),
-      body: anyNamed('body')
-  ));
-
-  void mockHttpData(Map data) {
-    surveyResult = data;
-    mockRequest().thenAnswer((_) async => data);
-  }
-
-  void mockHttpError(HttpError error) => mockRequest().thenThrow(error);
+  late RemoteSaveSurveyResult sut;
+  late HttpClientSpy httpClient;
+  late String url;
+  late String answer;
+  late Map surveyResult;
   
   setUp(() {
     url = faker.internet.httpsUrl();
     answer = faker.lorem.sentence();
+    surveyResult = ApiFactory.makeSurveyResultJson();
+
     httpClient = HttpClientSpy();
     sut = RemoteSaveSurveyResult(url: url, httpClient: httpClient);
-
-    mockHttpData(FakeSurveyResultFactory.makeApiJson());
+    httpClient.mockRequest(surveyResult);
   });
 
   test("Should call HttpClient with correct values", () async {
     await sut.save(answer: answer);
 
-    verify(httpClient.request(url: url, method: 'put', body: {'answer': answer}));
+    verify(() => httpClient.request(url: url, method: 'put', body: {'answer': answer}));
   });
 
   test("Should return suervey data on 200", () async {
@@ -70,25 +57,25 @@ void main() {
   });
 
   test("Should throw Unexpected if HttpClient returns 200 with invalid data", () async {
-    mockHttpData({"invalid_key": "invalid_value"});
+    httpClient.mockRequest(ApiFactory.makeInvalidJson());
 
     expect(sut.save(answer: answer), throwsA(DomainError.unexpected));
   });
 
   test("Should throw UnexpectedError if HttpClient returns 404", () async {
-    mockHttpError(HttpError.notFound);
+    httpClient.mockRequestError(HttpError.notFound);
 
     expect(sut.save(answer: answer), throwsA(DomainError.unexpected));
   });
 
   test("Should throw UnexpectedError if HttpClient returns 500", () async {
-    mockHttpError(HttpError.serverError);
+    httpClient.mockRequestError(HttpError.serverError);
 
     expect(sut.save(answer: answer), throwsA(DomainError.unexpected));
   });
 
   test("Should throw AcessDeniedError if HttpClient returns 403", () async {
-    mockHttpError(HttpError.forbidden);
+    httpClient.mockRequestError(HttpError.forbidden);
 
     expect(sut.save(answer: answer), throwsA(DomainError.accessDenied));
   });

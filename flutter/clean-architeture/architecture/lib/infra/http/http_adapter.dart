@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:meta/meta.dart';
+
 
 import '../../data/http/http.dart';
 
@@ -11,14 +11,15 @@ class HttpAdapter implements HttpClient {
 
   HttpAdapter(this.client);
 
-  Future<dynamic> request({@required String url, @required String method, Map body, Map headers}) async {
+  @override
+  Future<dynamic> request({required String url, required String method, Map? body, Map? headers}) async {
     final defaultHeaders = headers?.cast<String, String>() ?? {}..addAll({
       'content-type': 'application/json',
       'accept': 'application/json'
     });
     final jsonBody = body != null ? jsonEncode(body) : null;
     var response = Response('', 500);
-    Future<Response> futureResponse;
+    Future<Response>? futureResponse;
     try {
       if (method == 'post') {
         futureResponse = client.post(Uri.parse(url), headers: defaultHeaders, body: jsonBody);
@@ -28,7 +29,7 @@ class HttpAdapter implements HttpClient {
         futureResponse = client.put(Uri.parse(url), headers: defaultHeaders, body: jsonBody);
       }
       if (futureResponse != null) {
-        response = await futureResponse.timeout(Duration(seconds: 10));
+        response = await futureResponse.timeout(const Duration(seconds: 10));
       }
     } catch(error) {
       throw HttpError.serverError;

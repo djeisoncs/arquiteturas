@@ -1,3 +1,3 @@
 abstract class FeatchSecureCacheStorage {
-  Future<String> fetch(String key);
+  Future<String?> fetch(String key);
 }

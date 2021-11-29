@@ -5,7 +5,7 @@ import '../helpers/helpers.dart';
 
 mixin UiErrorManager {
 
-  void handleMainError(BuildContext context, Stream<UIError> stream) {
+  void handleMainError(BuildContext context, Stream<UIError?> stream) {
     stream.listen((error) {
       if (error != null) {
         showErrorMessage(context, error.description);

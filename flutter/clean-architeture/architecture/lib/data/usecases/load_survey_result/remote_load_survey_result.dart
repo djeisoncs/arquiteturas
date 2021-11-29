@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+
 
 import '../../../domain/entities/entities.dart';
 import '../../../domain/helpers/helpers.dart';
@@ -11,9 +11,10 @@ class RemoteLoadSurveyResult implements LoadSurveyResult {
   final String url;
   final HttpClient httpClient;
 
-  RemoteLoadSurveyResult({@required this.url, @required this.httpClient});
+  RemoteLoadSurveyResult({required this.url, required this.httpClient});
 
-  Future<SurveyResultEntity> loadBySurvey({String surveyId}) async {
+  @override
+  Future<SurveyResultEntity> loadBySurvey({required String surveyId}) async {
     try {
       final httpResponse = await httpClient.request(url: url, method: 'get');
 

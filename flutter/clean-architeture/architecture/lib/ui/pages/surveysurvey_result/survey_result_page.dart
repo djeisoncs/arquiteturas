@@ -26,19 +26,19 @@ class SurveyResultPage extends StatelessWidget with LoadingManager, SessionManag
 
           presenter.loadData();
 
-          return StreamBuilder<SurveyResultViewModel>(
+          return StreamBuilder<SurveyResultViewModel?>(
             stream: presenter.surveyResultStream,
             builder: (context, snapshot) {
 
               if (snapshot.hasError) {
-                return ReloadScreen(error: snapshot.error, reload: presenter.loadData);
+                return ReloadScreen(error: '${snapshot.error}', reload: presenter.loadData);
               }
 
               if (snapshot.hasData) {
-                return SurveyResult(viewModel: snapshot.data, onSave: presenter.save);
+                return SurveyResult(viewModel: snapshot.data!, onSave: presenter.save);
               }
 
-              return SizedBox(height: 0);
+              return const SizedBox(height: 0);
             },
           );
         },

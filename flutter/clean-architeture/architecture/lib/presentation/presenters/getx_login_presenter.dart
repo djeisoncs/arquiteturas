@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
+
 
 import '../../ui/pages/login/login.dart';
 import '../../ui/helpers/errors/errors.dart';
@@ -15,18 +15,22 @@ class GetxLoginPresenter extends GetxController with LoadingManager, NavigationM
   final Authentication authentication;
   final SaveCurrentAccount saveCurrentAccount;
 
-  String _email;
-  String _password;
-  var _emailError = Rx<UIError>();
-  var _passwordError = Rx<UIError>();
+  String? _email;
+  String? _password;
 
-  Stream<UIError> get emailErrorStream => _emailError.stream;
-  Stream<UIError> get passwordErrorStream => _passwordError.stream;
+  final _emailError = Rx<UIError?>(null);
+  final _passwordError = Rx<UIError?>(null);
+
+  @override
+  Stream<UIError?> get emailErrorStream => _emailError.stream;
+
+  @override
+  Stream<UIError?> get passwordErrorStream => _passwordError.stream;
 
   GetxLoginPresenter({
-    @required this.validation,
-    @required this.authentication,
-    @required this.saveCurrentAccount
+    required this.validation,
+    required this.authentication,
+    required this.saveCurrentAccount
   });
 
   @override
@@ -43,7 +47,7 @@ class GetxLoginPresenter extends GetxController with LoadingManager, NavigationM
     _validateForm();
   }
 
-  UIError _validadeField(String field) {
+  UIError? _validadeField(String field) {
     final formData = {
       'email': _email,
       'password': _password
@@ -70,7 +74,7 @@ class GetxLoginPresenter extends GetxController with LoadingManager, NavigationM
       mainError = null;
       isLoading = true;
 
-      final account = await authentication.auth(AuthenticationParams(email: _email, password: _password));
+      final account = await authentication.auth(AuthenticationParams(email: _email!, password: _password!));
       await saveCurrentAccount.save(account);
       navigateTo = '/surveys';
     } on DomainError catch (error) {

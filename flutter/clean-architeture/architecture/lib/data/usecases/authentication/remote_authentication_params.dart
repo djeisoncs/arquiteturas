@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+
 
 import '../../../domain/usecases/authentication.dart';
 
@@ -7,8 +7,8 @@ class RemoteAuthenticationParams {
   String password;
 
   RemoteAuthenticationParams({
-    @required this.email,
-    @required this.password
+    required this.email,
+    required this.password
   });
 
   factory RemoteAuthenticationParams.fromDomain(AuthenticationParams params) =>

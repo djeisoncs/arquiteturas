@@ -11,7 +11,7 @@ import 'login_presenter.dart';
 class LoginPage extends StatelessWidget with KeyboardManager, LoadingManager, UiErrorManager, NavigationManager {
   final LoginPresenter presenter;
 
-  LoginPage(this.presenter);
+  LoginPage(this.presenter, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,24 +33,24 @@ class LoginPage extends StatelessWidget with KeyboardManager, LoadingManager, Ui
                   LoginHeader(),
                   HeadLine1(text: R.string.login),
                   Padding(
-                    padding: EdgeInsets.all(32),
-                    child: Provider(
+                    padding: const EdgeInsets.all(32),
+                    child: ListenableProvider(
                       create: (_) => presenter,
                       child: Form(
                         child: Column(
                           children: <Widget>[
                             EmailInput(),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 8,
                                 bottom: 32,
                               ),
                               child: PasswordInput(),
                             ),
                             LoginButton(),
-                            FlatButton.icon(
+                            TextButton.icon(
                               onPressed: presenter.goToSignUp,
-                              icon: Icon(Icons.person),
+                              icon: const Icon(Icons.person),
                               label: Text(R.string.addAccount),
                             ),
                           ],

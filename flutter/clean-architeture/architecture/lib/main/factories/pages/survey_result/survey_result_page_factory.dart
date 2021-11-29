@@ -5,4 +5,4 @@ import '../../../../ui/pages/pages.dart';
 
 import 'survey_result_presenter_factory.dart';
 
-Widget makeSurveysResultPage() => SurveyResultPage(makeGetxSurveyResultPresenter(Get.parameters['survey_id']));
+Widget makeSurveysResultPage() => SurveyResultPage(makeGetxSurveyResultPresenter(Get.parameters['survey_id'] ?? ''));

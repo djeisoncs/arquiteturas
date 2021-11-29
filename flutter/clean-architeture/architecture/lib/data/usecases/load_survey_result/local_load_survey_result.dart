@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+
 
 import '../../../domain/entities/entities.dart';
 import '../../../domain/helpers/helpers.dart';
@@ -9,10 +9,10 @@ import '../../models/models.dart';
 class LocalLoadSurveyResult implements LoadSurveyResult {
   final CacheStorage cacheStorage;
 
-  LocalLoadSurveyResult({@required this.cacheStorage});
+  LocalLoadSurveyResult({required this.cacheStorage});
 
   @override
-  Future<SurveyResultEntity> loadBySurvey({String surveyId}) async {
+  Future<SurveyResultEntity> loadBySurvey({required String surveyId}) async {
     try {
       final data = await cacheStorage.fetch('survey_result/$surveyId');
 

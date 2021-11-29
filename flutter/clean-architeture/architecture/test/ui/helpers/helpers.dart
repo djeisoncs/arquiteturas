@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 
-Widget makePage({@required String path, @required Widget Function() page}) {
+Widget makePage({required String path, required Widget Function() page}) {
   final getPages = [
     GetPage(name: path, page: page),
     GetPage(name: '/any_route', page: () => Scaffold(appBar: AppBar(title: Text('any title')), body: Text('fake page'))),

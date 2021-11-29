@@ -1,6 +1,6 @@
 
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+
 
 import '../entities/account_entity.dart';
 
@@ -16,11 +16,11 @@ class AddAccountParams extends Equatable {
   final String password;
   final String passwordConfirmation;
 
-  AddAccountParams({
-    @required this.name,
-    @required this.email,
-    @required this.password,
-    @required this.passwordConfirmation
+  const AddAccountParams({
+    required this.name,
+    required this.email,
+    required this.password,
+    required this.passwordConfirmation
   });
 
   @override

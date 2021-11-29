@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../helpers/helpers.dart';
 
-void showLoading(BuildContext context) {
-  showDialog(
+Future<void> showLoading(BuildContext context) async{
+  await Future.delayed(Duration.zero);
+  await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {
@@ -14,8 +15,8 @@ void showLoading(BuildContext context) {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  CircularProgressIndicator(),
-                  SizedBox(
+                  const CircularProgressIndicator(),
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(

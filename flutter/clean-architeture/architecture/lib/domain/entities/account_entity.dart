@@ -4,7 +4,7 @@ class AccountEntity extends Equatable {
 
   String token;
 
-  AccountEntity(this.token);
+  AccountEntity({required this.token});
 
   @override
   List<Object> get props => [token];

@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+
 
 import '../../../domain/entities/entities.dart';
 import '../../../domain/helpers/helpers.dart';
@@ -10,7 +10,7 @@ class LocalSaveCurrentAccount implements SaveCurrentAccount {
 
   final SaveSecureCacheStorage saveSecureCacheStorage;
 
-  LocalSaveCurrentAccount({@required this.saveSecureCacheStorage});
+  LocalSaveCurrentAccount({required this.saveSecureCacheStorage});
 
   @override
   Future<void> save(AccountEntity account) async {

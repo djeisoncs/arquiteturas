@@ -1,21 +1,16 @@
 import 'package:faker/faker.dart';
-import 'package:localstorage/localstorage.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:architecture/infra/cache/cache.dart';
 
-class LocalStorageSpy extends Mock implements LocalStorage {}
+import '../mocks/local_storage_spy.dart';
 
 void main() {
-  LocalStorageSpy localStorage;
-  LocalStorageAdapter sut;
-  String key;
+  late LocalStorageSpy localStorage;
+  late LocalStorageAdapter sut;
+  late String key;
   dynamic value;
-
-  void mockDeleteError() => when(localStorage.deleteItem(any)).thenThrow(Exception());
-
-  void mockSaveError() => when(localStorage.setItem(any, any)).thenThrow(Exception());
 
   setUp(() {
     key = faker.randomGenerator.string(5);
@@ -28,20 +23,20 @@ void main() {
     test('Shoud call localStorage with correct values', () async {
       await sut.save(key: key, value: value);
 
-      verify(localStorage.deleteItem(key)).called(1);
-      verify(localStorage.setItem(key, value)).called(1);
+      verify(() => localStorage.deleteItem(key)).called(1);
+      verify(() => localStorage.setItem(key, value)).called(1);
     });
 
     test('Shoud throw if deleteItem throws', () async {
-      mockDeleteError();
+      localStorage.mockDeleteError();
 
-      expect(sut.save(key: key, value: value), throwsA(TypeMatcher<Exception>()));
+      expect(sut.save(key: key, value: value), throwsA(const TypeMatcher<Exception>()));
     });
 
     test('Shoud throw if setItem throws', () async {
-      mockSaveError();
+      localStorage.mockSaveError();
 
-      expect(sut.save(key: key, value: value), throwsA(TypeMatcher<Exception>()));
+      expect(sut.save(key: key, value: value), throwsA(const TypeMatcher<Exception>()));
     });
   });
 
@@ -49,38 +44,28 @@ void main() {
     test('Shoud call localStorage with correct values', () async {
       await sut.delete(key);
 
-      verify(localStorage.deleteItem(key)).called(1);
+      verify(() => localStorage.deleteItem(key)).called(1);
     });
 
     test('Shoud throw if deleteItem throws', () async {
-      mockDeleteError();
+      localStorage.mockDeleteError();
 
       expect(sut.delete(key), throwsA(TypeMatcher<Exception>()));
     });
   });
 
   group('fetch', () {
-    String result;
-
-    PostExpectation mockFetchCall() => when(localStorage.getItem(any));
-
-    void mockFetch() {
-      result = faker.randomGenerator.string(50);
-      mockFetchCall().thenAnswer((_) async => result);
-    }
-
-    void mockFetchError() => mockFetchCall().thenThrow(Exception());
+    late String result;
 
     setUp(() {
       result = faker.randomGenerator.string(50);
-
-      mockFetch();
+      localStorage.mockFetch(result);
     });
 
     test('Shoud call localStorage with correct values', () async {
       await sut.fetch(key);
 
-      verify(localStorage.getItem(key)).called(1);
+      verify(() => localStorage.getItem(key)).called(1);
     });
 
     test('Shoud return same value as localStorage', () async {
@@ -90,7 +75,7 @@ void main() {
     });
 
     test('Shoud throw if getItem throws', () async {
-      mockFetchError();
+      localStorage.mockFetchError();
 
       expect(sut.fetch(key), throwsA(TypeMatcher<Exception>()));
     });
